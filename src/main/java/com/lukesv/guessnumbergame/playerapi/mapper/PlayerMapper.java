@@ -13,10 +13,11 @@ import com.lukesv.guessnumbergame.playerapi.entity.PlayerEntity;
 @Component
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface PlayerMapper {
-
+	
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "created", ignore = true)
 	@Mapping(target = "lastModified", ignore = true)
+	@Mapping(target = "version", ignore = true)
 	PlayerEntity playerDtoToPlayerEntity(PlayerSummaryDto playerDto);
 
 	List<PlayerEntity> playerDtoToPlayerEntity(List<PlayerSummaryDto> playerDtos);
