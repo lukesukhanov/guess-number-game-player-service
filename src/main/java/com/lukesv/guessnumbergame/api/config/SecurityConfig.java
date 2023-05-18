@@ -7,13 +7,15 @@ import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.context.DelegatingSecurityContextRepository;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
@@ -37,15 +39,14 @@ public class SecurityConfig {
 						.clearAuthentication(true)
 						.invalidateHttpSession(true)
 						.deleteCookies("JSESSIONID"))
-				.formLogin(formLogin -> formLogin
-						.usernameParameter("username")
-						.passwordParameter("password")
-						.successHandler(defaultAuthenticationSuccessHandler()))
+				.httpBasic(httpBasic -> httpBasic
+						.authenticationEntryPoint(defaultAuthenticationEntryPoint()))
 				.requestCache(cache -> cache.requestCache(defaultRequestCache())) // Избыточно
-				.authorizeHttpRequests()
-				.requestMatchers(HttpMethod.POST).authenticated()
-				.anyRequest().permitAll()
-				.and()
+				.sessionManagement(sessionManagement -> sessionManagement
+						.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+				.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+						.requestMatchers(HttpMethod.POST).authenticated()
+						.anyRequest().permitAll())
 				.build();
 	}
 
@@ -59,8 +60,8 @@ public class SecurityConfig {
 	@Bean
 	CorsConfigurationSource defaultCorsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500", "https://127.0.0.1:5500"));
-		configuration.setAllowedMethods(Arrays.asList("GET"));
+		configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST"));
 		configuration.setAllowCredentials(true);
 		configuration.setAllowedHeaders(Arrays.asList("*"));
 		configuration.setMaxAge(3600L);
@@ -80,8 +81,9 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	AuthenticationSuccessHandler defaultAuthenticationSuccessHandler() {
-		return (request, response, authentication) -> {
+	AuthenticationEntryPoint defaultAuthenticationEntryPoint() {
+		return (request, response, e) -> {
+			response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
 		};
 	}
 
