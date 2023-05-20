@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +28,7 @@ public class RegistrationController {
 
 	@PostMapping
 	@Transactional
-	public ResponseEntity<?> register(RegistrationForm registrationForm) {
+	public ResponseEntity<?> register(@RequestBody RegistrationForm registrationForm) {
 		userDetailsManager.createUser(registrationForm.toUserEntity(passwordEncoder));
 		PlayerSummary player = new PlayerSummary(null, registrationForm.getUsername(), null);
 		PlayerSummary savedPlayer = playerService.create(player);

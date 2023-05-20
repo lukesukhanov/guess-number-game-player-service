@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -45,5 +46,12 @@ public class DefaultResponseEntityExceptionHandler extends ResponseEntityExcepti
 		Map<String, Object> responseBody = Map.of("error", e.getMessage());
 		HttpHeaders headers = new HttpHeaders();
 		return handleExceptionInternal(e, responseBody, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
+	}
+	
+	@ExceptionHandler(DuplicateKeyException.class)
+	protected ResponseEntity<Object> handleDuplicateKeyException(RuntimeException e, WebRequest request) {
+		Map<String, Object> responseBody = Map.of("error", "Duplicate");
+		HttpHeaders headers = new HttpHeaders();
+		return handleExceptionInternal(e, responseBody, headers, HttpStatus.BAD_REQUEST, request);
 	}
 }

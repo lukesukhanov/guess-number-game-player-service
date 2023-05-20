@@ -45,6 +45,7 @@ public class SecurityConfig {
 				.sessionManagement(sessionManagement -> sessionManagement
 						.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 				.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+						.requestMatchers(HttpMethod.POST, "/register", "/error").permitAll()
 						.requestMatchers(HttpMethod.POST).authenticated()
 						.anyRequest().permitAll())
 				.build();
