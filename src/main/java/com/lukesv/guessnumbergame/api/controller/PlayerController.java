@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lukesv.guessnumbergame.api.dto.PlayerSummary;
@@ -29,42 +30,48 @@ public class PlayerController {
 
 	@GetMapping
 	public ResponseEntity<?> getAll() {
-		List<PlayerSummary> players = playerService.getAll();
+		List<PlayerSummary> players = this.playerService.getAll();
 		return ResponseEntity.ok(players);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getById(@PathVariable Long id) {
-		PlayerSummary player = playerService.getById(id);
+		PlayerSummary player = this.playerService.getById(id);
+		return ResponseEntity.ok(player);
+	}
+	
+	@GetMapping(params = "username")
+	public ResponseEntity<?> getByUsername(@RequestParam String username) {
+		PlayerSummary player = this.playerService.getByUsername(username);
 		return ResponseEntity.ok(player);
 	}
 
 	@GetMapping("/withBestResult")
 	public ResponseEntity<?> getPlayerWithMinBestAttemptsCount() {
-		return ResponseEntity.ok(playerService.getPlayersWithBestResult());
+		return ResponseEntity.ok(this.playerService.getPlayersWithBestResult());
 	}
 
 	@PostMapping
 	public ResponseEntity<?> create(@Valid @RequestBody PlayerSummary player) {
-		PlayerSummary savedPlayer = playerService.create(player);
+		PlayerSummary savedPlayer = this.playerService.create(player);
 		return ResponseEntity.created(URI.create("/players/" + savedPlayer.getId())).body(savedPlayer);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateById(@PathVariable Long id, @Valid @RequestBody PlayerSummary player) {
-		playerService.update(id, player);
+	public ResponseEntity<?> update(@PathVariable Long id, @Valid @RequestBody PlayerSummary player) {
+		this.playerService.update(id, player);
 		return ResponseEntity.noContent().build();
 	}
-
+	
 	@PatchMapping("/{id}")
-	public ResponseEntity<?> patchById(@PathVariable Long id, @Valid @RequestBody PlayerSummary player) {
-		playerService.patch(id, player);
+	public ResponseEntity<?> patch(@PathVariable Long id, @RequestBody PlayerSummary player) {
+		this.playerService.patch(id, player);
 		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteById(@PathVariable Long id) {
-		playerService.deleteById(id);
+		this.playerService.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
 

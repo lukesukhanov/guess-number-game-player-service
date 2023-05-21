@@ -9,6 +9,8 @@ public interface PlayerService {
 	public List<PlayerSummary> getAll();
 
 	public PlayerSummary getById(Long id);
+	
+	public PlayerSummary getByUsername(String username);
 
 	public List<PlayerSummary> getPlayersWithBestResult();
 

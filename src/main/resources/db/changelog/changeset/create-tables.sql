@@ -31,7 +31,7 @@ DROP FUNCTION IF EXISTS sync_update_created_column CASCADE;
 CREATE FUNCTION sync_update_created_column() RETURNS trigger AS
 $$
 BEGIN
-	NEW.created := OLD();
+	NEW.created := OLD.created;
 	RETURN NEW;
 END;
 $$

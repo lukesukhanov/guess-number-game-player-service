@@ -29,9 +29,9 @@ public class RegistrationController {
 	@PostMapping
 	@Transactional
 	public ResponseEntity<?> register(@RequestBody RegistrationForm registrationForm) {
-		userDetailsManager.createUser(registrationForm.toUserEntity(passwordEncoder));
+		this.userDetailsManager.createUser(registrationForm.toUserEntity(this.passwordEncoder));
 		PlayerSummary player = new PlayerSummary(null, registrationForm.getUsername(), null);
-		PlayerSummary savedPlayer = playerService.create(player);
+		PlayerSummary savedPlayer = this.playerService.create(player);
 		return ResponseEntity.created(URI.create("/players/" + savedPlayer.getId())).body(savedPlayer);
 	}
 }

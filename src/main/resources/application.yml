@@ -4,6 +4,9 @@ server:
       context-path: /api
       session:
          timeout: 15m
+         cookie:
+            same-site: none
+            secure: true
 spring:
    datasource:
       type: com.zaxxer.hikari.HikariDataSource

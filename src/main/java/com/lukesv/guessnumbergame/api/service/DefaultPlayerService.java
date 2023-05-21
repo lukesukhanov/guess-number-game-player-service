@@ -6,6 +6,7 @@ import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,47 +26,58 @@ public class DefaultPlayerService implements PlayerService {
 	private final PlayerRepository playerRepository;
 	private final PlayerMapper playerMapper;
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@Override
 	public List<PlayerSummary> getAll() {
-		return playerRepository.findAllPlayerSummaries();
+		return this.playerRepository.findAllPlayerSummaries();
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@Override
 	public PlayerSummary getById(Long id) {
-		return playerRepository.findPlayerSummaryById(id)
+		return this.playerRepository.findPlayerSummaryById(id)
 				.orElseThrow(() -> new PlayerNotFoundException(id));
+	}
+
+	@PreAuthorize("hasRole('ADMIN') || #username == authentication.name")
+	@Override
+	public PlayerSummary getByUsername(String username) {
+		return this.playerRepository.findPlayerSummaryByUsername(username)
+				.orElseThrow(() -> new PlayerNotFoundException(username));
 	}
 
 	@Override
 	public List<PlayerSummary> getPlayersWithBestResult() {
-		return playerRepository.findPlayerSummariesWithBestResult();
+		return this.playerRepository.findPlayerSummariesWithBestResult();
 	}
 
 	@Override
 	public PlayerSummary create(PlayerSummary player) {
-		PlayerEntity playerEntity = playerMapper.playerSummaryToPlayerEntity(player);
-		PlayerEntity savedPlayerEntity = playerRepository.save(playerEntity);
-		return playerMapper.playerEntityToPlayerSummary(savedPlayerEntity);
+		PlayerEntity playerEntity = this.playerMapper.playerSummaryToPlayerEntity(player);
+		PlayerEntity savedPlayerEntity = this.playerRepository.save(playerEntity);
+		return this.playerMapper.playerEntityToPlayerSummary(savedPlayerEntity);
 	}
 
+	@PreAuthorize("hasRole('ADMIN') || #player.username == authentication.name")
 	@Transactional
 	@Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 5,
 			backoff = @Backoff(delay = 100L), recover = "recoverUpdate")
 	@Override
 	public void update(Long id, PlayerSummary player) {
-		PlayerEntity playerEntity = playerRepository.findById(id)
+		PlayerEntity playerEntity = this.playerRepository.findById(id)
 				.orElseThrow(() -> new PlayerNotFoundException(id));
 		playerEntity.setUsername(player.getUsername());
 		playerEntity.setBestAttemptsCount(player.getBestAttemptsCount());
-		playerRepository.save(playerEntity);
+		this.playerRepository.save(playerEntity);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@Transactional
 	@Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 5,
 			backoff = @Backoff(delay = 100L), recover = "recoverPatch")
 	@Override
 	public void patch(Long id, PlayerSummary player) {
-		PlayerEntity playerEntity = playerRepository.findById(id)
+		PlayerEntity playerEntity = this.playerRepository.findById(id)
 				.orElseThrow(() -> new PlayerNotFoundException(id));
 		if (player.getUsername() != null) {
 			playerEntity.setUsername(player.getUsername());
@@ -73,12 +85,13 @@ public class DefaultPlayerService implements PlayerService {
 		if (player.getBestAttemptsCount() != null) {
 			playerEntity.setBestAttemptsCount(player.getBestAttemptsCount());
 		}
-		playerRepository.save(playerEntity);
+		this.playerRepository.save(playerEntity);
 	}
 
+	@PreAuthorize("hasRole('ADMIN')")
 	@Override
 	public void deleteById(Long id) {
-		playerRepository.deleteById(id);
+		this.playerRepository.deleteById(id);
 	}
 
 	@Recover
