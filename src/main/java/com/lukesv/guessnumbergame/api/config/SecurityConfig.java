@@ -11,6 +11,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,8 +19,11 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
+import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter.Directive;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -29,6 +33,7 @@ import com.lukesv.guessnumbergame.api.mapper.PlayerMapper;
 import com.lukesv.guessnumbergame.api.service.PlayerService;
 
 @Configuration
+@EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
@@ -41,16 +46,16 @@ public class SecurityConfig {
 				.logout(logout -> logout
 						.clearAuthentication(true)
 						.invalidateHttpSession(true)
-						.deleteCookies("JSESSIONID"))
+						.addLogoutHandler(defaultClearSiteDataLogoutHandler())
+						.logoutSuccessHandler(defaultLogoutSuccessHandler()))
 				.httpBasic(httpBasic -> httpBasic
 						.authenticationEntryPoint(defaultAuthenticationEntryPoint()))
-				.requestCache(cache -> cache.requestCache(defaultRequestCache())) // Избыточно
 				.sessionManagement(sessionManagement -> sessionManagement
 						.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 				.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
 						.requestMatchers("/error").permitAll()
 						.requestMatchers(HttpMethod.GET).permitAll()
-						.requestMatchers(HttpMethod.POST, "/register", "/login").permitAll()
+						.requestMatchers(HttpMethod.POST, "/login", "/logout", "/register").permitAll()
 						.requestMatchers(HttpMethod.PUT).hasRole("USER"))
 				.build();
 	}
@@ -69,6 +74,16 @@ public class SecurityConfig {
 	}
 
 	@Bean
+	HeaderWriterLogoutHandler defaultClearSiteDataLogoutHandler() {
+		return new HeaderWriterLogoutHandler(new ClearSiteDataHeaderWriter(Directive.COOKIES));
+	}
+
+	@Bean
+	LogoutSuccessHandler defaultLogoutSuccessHandler() {
+		return new HttpStatusReturningLogoutSuccessHandler();
+	}
+
+	@Bean
 	UserDetailsManager defaultUserDetailsManager(DataSource dataSource) {
 		return new JdbcUserDetailsManager(dataSource);
 	}
@@ -83,14 +98,6 @@ public class SecurityConfig {
 		return (request, response, e) -> {
 			response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
 		};
-	}
-
-	// Избыточно
-	@Bean
-	RequestCache defaultRequestCache() {
-		HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
-		requestCache.setMatchingRequestParameterName("continue");
-		return requestCache;
 	}
 
 	@Bean
