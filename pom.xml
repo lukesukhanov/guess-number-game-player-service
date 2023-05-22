@@ -9,13 +9,13 @@
 	</parent>
 
 	<groupId>com.lukesv.guessnumbergame</groupId>
-	<artifactId>guess-number-game-player-api</artifactId>
+	<artifactId>players-api</artifactId>
 	<version>0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>guess-number-game-player-api</name>
-	<description>guess-number-game-player-api</description>
-	<url>https://github.com/lukesukhanov/guess-number-game-player-api</url>
+	<name>players-api</name>
+	<description>players-api</description>
+	<url>https://github.com/lukesukhanov/guess-number-game-api</url>
 
 	<developers>
 		<developer>
@@ -68,6 +68,16 @@
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
@@ -101,7 +111,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>guess-number-game-player-api</finalName>
+		<finalName>players-api</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
