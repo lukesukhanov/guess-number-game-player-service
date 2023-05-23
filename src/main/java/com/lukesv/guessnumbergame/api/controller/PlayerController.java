@@ -3,6 +3,7 @@ package com.lukesv.guessnumbergame.api.controller;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping(path = "/players", produces = "application/json")
+@RequestMapping(path = "/players", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class PlayerController {
 
@@ -39,7 +40,7 @@ public class PlayerController {
 		PlayerSummary player = this.playerService.getById(id);
 		return ResponseEntity.ok(player);
 	}
-	
+
 	@GetMapping(params = "username")
 	public ResponseEntity<?> getByUsername(@RequestParam String username) {
 		PlayerSummary player = this.playerService.getByUsername(username);
@@ -62,7 +63,7 @@ public class PlayerController {
 		this.playerService.update(id, player);
 		return ResponseEntity.noContent().build();
 	}
-	
+
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> patch(@PathVariable Long id, @RequestBody PlayerSummary player) {
 		this.playerService.patch(id, player);
