@@ -2,6 +2,7 @@ package com.lukesv.guessnumbergame.api.controller;
 
 import java.net.URI;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
@@ -18,7 +19,7 @@ import com.lukesv.guessnumbergame.api.service.PlayerService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping(value = "/register", produces = "application/json")
+@RequestMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class RegistrationController {
 

@@ -40,9 +40,12 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 		return http
-				.securityContext(securityContext -> securityContext.requireExplicitSave(true))
-				.cors(cors -> cors.configurationSource(defaultCorsConfigurationSource()))
-				.csrf(csrf -> csrf.disable())
+				.securityContext(securityContext -> securityContext
+						.requireExplicitSave(true))
+				.cors(cors -> cors
+						.configurationSource(defaultCorsConfigurationSource()))
+				.csrf(csrf -> csrf
+						.disable())
 				.logout(logout -> logout
 						.clearAuthentication(true)
 						.invalidateHttpSession(true)
@@ -64,9 +67,13 @@ public class SecurityConfig {
 	CorsConfigurationSource defaultCorsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500"));
-		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT"));
+		configuration.setAllowedMethods(Arrays.asList("OPTIONS", "GET", "POST", "PUT"));
+		configuration.setAllowedHeaders(
+				Arrays.asList("Content-Type", "Accept", "Authorization", "X-XSRF-Token", "X-CSRF-Token"));
+		configuration.setExposedHeaders(Arrays.asList("Date", "Content-Type", "Connection", "Keep-Alive",
+				"Transfer-Encoding", "Cache-Control", "Pragma", "Expires", "X-Content-Type-Options",
+				"Strict-Transport-Security", "X-Frame-Options", "X-XSS-Protection", "Vary", "Location"));
 		configuration.setAllowCredentials(true);
-		configuration.setAllowedHeaders(Arrays.asList("*"));
 		configuration.setMaxAge(3600L);
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
