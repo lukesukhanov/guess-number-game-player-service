@@ -6,11 +6,15 @@ import java.util.Base64;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @RequiredArgsConstructor
 @Getter
+@EqualsAndHashCode(of = "username")
+@ToString
 public final class RegistrationForm implements Serializable {
 
 	private static final long serialVersionUID = 1L;

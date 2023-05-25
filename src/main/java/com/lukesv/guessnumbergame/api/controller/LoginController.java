@@ -15,8 +15,8 @@ public class LoginController {
 
 	@PostMapping
 	public ResponseEntity<?> login() {
-		Map<String, String> responseBody = Map.of("username",
-				SecurityContextHolder.getContext().getAuthentication().getName());
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Map<String, String> responseBody = Map.of("username", username);
 		return ResponseEntity.ok(responseBody);
 	}
 }
