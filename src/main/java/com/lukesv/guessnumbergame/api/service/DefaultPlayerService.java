@@ -26,20 +26,17 @@ public class DefaultPlayerService implements PlayerService {
 	private final PlayerRepository playerRepository;
 	private final PlayerMapper playerMapper;
 
-	@PreAuthorize("hasRole('ADMIN')")
 	@Override
 	public List<PlayerSummary> getAll() {
 		return this.playerRepository.findAllPlayerSummaries();
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
 	@Override
 	public PlayerSummary getById(Long id) {
 		return this.playerRepository.findPlayerSummaryById(id)
 				.orElseThrow(() -> new PlayerNotFoundException(id));
 	}
 
-	@PreAuthorize("hasRole('ADMIN') || #username == authentication.name")
 	@Override
 	public PlayerSummary getByUsername(String username) {
 		return this.playerRepository.findPlayerSummaryByUsername(username)
@@ -71,6 +68,7 @@ public class DefaultPlayerService implements PlayerService {
 		this.playerRepository.save(playerEntity);
 	}
 
+	// Redundant method.
 	@PreAuthorize("hasRole('ADMIN')")
 	@Transactional
 	@Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 5,

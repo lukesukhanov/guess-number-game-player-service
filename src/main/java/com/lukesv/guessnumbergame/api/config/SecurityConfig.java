@@ -42,10 +42,13 @@ public class SecurityConfig {
 		return http
 				.securityContext(securityContext -> securityContext
 						.requireExplicitSave(true))
+				.headers(headers -> headers
+						.frameOptions(frameOptions -> frameOptions
+								.disable()))
 				.cors(cors -> cors
 						.configurationSource(defaultCorsConfigurationSource()))
 				.csrf(csrf -> csrf
-						.disable())
+						.ignoringRequestMatchers("/login", "/register", "/csrfToken"))
 				.logout(logout -> logout
 						.clearAuthentication(true)
 						.invalidateHttpSession(true)
@@ -58,7 +61,8 @@ public class SecurityConfig {
 				.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
 						.requestMatchers("/error").permitAll()
 						.requestMatchers(HttpMethod.GET).permitAll()
-						.requestMatchers(HttpMethod.POST, "/login", "/logout", "/register").permitAll()
+						.requestMatchers(HttpMethod.POST, "/login", "/register").permitAll()
+						.requestMatchers(HttpMethod.POST, "/logout", "/csrfToken").hasRole("USER")
 						.requestMatchers(HttpMethod.PUT).hasRole("USER"))
 				.build();
 	}
@@ -67,12 +71,9 @@ public class SecurityConfig {
 	CorsConfigurationSource defaultCorsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500"));
-		configuration.setAllowedMethods(Arrays.asList("OPTIONS", "GET", "POST", "PUT"));
-		configuration.setAllowedHeaders(
-				Arrays.asList("Content-Type", "Accept", "Authorization", "X-XSRF-Token", "X-CSRF-Token"));
-		configuration.setExposedHeaders(Arrays.asList("Date", "Content-Type", "Connection", "Keep-Alive",
-				"Transfer-Encoding", "Cache-Control", "Pragma", "Expires", "X-Content-Type-Options",
-				"Strict-Transport-Security", "X-Frame-Options", "X-XSS-Protection", "Vary", "Location"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT"));
+		configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-CSRF-TOKEN"));
+		configuration.setExposedHeaders(Arrays.asList("Location", "X-CSRF-TOKEN", "Set-Cookie"));
 		configuration.setAllowCredentials(true);
 		configuration.setMaxAge(3600L);
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

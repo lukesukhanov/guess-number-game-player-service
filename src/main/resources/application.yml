@@ -5,7 +5,7 @@ server:
       session:
          timeout: 15m
          cookie:
-            same-site: none
+            same-site: Strict
             secure: true
 spring:
    datasource:
