@@ -42,9 +42,6 @@ public class SecurityConfig {
 		return http
 				.securityContext(securityContext -> securityContext
 						.requireExplicitSave(true))
-				.headers(headers -> headers
-						.frameOptions(frameOptions -> frameOptions
-								.disable()))
 				.cors(cors -> cors
 						.configurationSource(defaultCorsConfigurationSource()))
 				.csrf(csrf -> csrf
@@ -73,7 +70,7 @@ public class SecurityConfig {
 		configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500"));
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT"));
 		configuration.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "X-CSRF-TOKEN"));
-		configuration.setExposedHeaders(Arrays.asList("Location", "X-CSRF-TOKEN", "Set-Cookie"));
+		configuration.setExposedHeaders(Arrays.asList("Location", "X-CSRF-TOKEN"));
 		configuration.setAllowCredentials(true);
 		configuration.setMaxAge(3600L);
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

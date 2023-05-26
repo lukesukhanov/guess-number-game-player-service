@@ -47,10 +47,17 @@ public class DefaultResponseEntityExceptionHandler extends ResponseEntityExcepti
 		HttpHeaders headers = new HttpHeaders();
 		return handleExceptionInternal(e, responseBody, headers, HttpStatus.INTERNAL_SERVER_ERROR, request);
 	}
-	
+
 	@ExceptionHandler(DuplicateKeyException.class)
 	protected ResponseEntity<Object> handleDuplicateKeyException(RuntimeException e, WebRequest request) {
 		Map<String, Object> responseBody = Map.of("error", "Duplicate");
+		HttpHeaders headers = new HttpHeaders();
+		return handleExceptionInternal(e, responseBody, headers, HttpStatus.BAD_REQUEST, request);
+	}
+
+	@ExceptionHandler(BadRegistrationCredentials.class)
+	protected ResponseEntity<Object> handleBadRegistrationCredentials(RuntimeException e, WebRequest request) {
+		Map<String, Object> responseBody = Map.of("error", e.getMessage());
 		HttpHeaders headers = new HttpHeaders();
 		return handleExceptionInternal(e, responseBody, headers, HttpStatus.BAD_REQUEST, request);
 	}
