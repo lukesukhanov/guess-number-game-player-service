@@ -6,26 +6,32 @@ import java.util.Base64;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import com.lukesv.guessnumbergame.api.exception.BadRegistrationCredentials;
+
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 @RequiredArgsConstructor
-@Getter
-@EqualsAndHashCode(of = "username")
-@ToString
 public final class RegistrationForm implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private final String username;
-	private final String password;
+	private final String credentials;
 
-	public User toUserEntity(PasswordEncoder passwordEncoder) {
-		byte[] decodedPasswordBytes = Base64.getDecoder().decode(this.password);
-		String decodedPassword = new String(decodedPasswordBytes, StandardCharsets.UTF_8);
-		String hashedPassword = passwordEncoder.encode(decodedPassword);
-		return new User(this.username, hashedPassword);
+	public User toUser(PasswordEncoder passwordEncoder) {
+		byte[] decodedCredentialsBytes = Base64.getDecoder().decode(this.credentials);
+		String[] decodedCredentials = new String(decodedCredentialsBytes, StandardCharsets.UTF_8).split(":");
+		if (decodedCredentials.length != 2) {
+			throw new BadRegistrationCredentials("Credentials must be in format 'username:password'");
+		}
+		String username = decodedCredentials[0].trim();
+		if (username.isEmpty()) {
+			throw new BadRegistrationCredentials("Username is required");
+		}
+		String password = decodedCredentials[1];
+		if (password.isEmpty()) {
+			throw new BadRegistrationCredentials("Password is required");
+		}
+		String hashedPassword = passwordEncoder.encode(password);
+		return new User(username, hashedPassword);
 	}
 }

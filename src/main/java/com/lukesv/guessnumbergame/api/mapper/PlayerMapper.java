@@ -16,9 +16,9 @@ public interface PlayerMapper {
 	
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "version", ignore = true)
-	PlayerEntity playerSummaryToPlayerEntity(PlayerSummary playerSummaryDto);
+	PlayerEntity playerSummaryToPlayerEntity(PlayerSummary playerSummary);
 
-	List<PlayerEntity> playerSummaryToPlayerEntity(List<PlayerSummary> playerSummaryDtos);
+	List<PlayerEntity> playerSummaryToPlayerEntity(List<PlayerSummary> playerSummaryies);
 
 	PlayerSummary playerEntityToPlayerSummary(PlayerEntity playerEntity);
 
