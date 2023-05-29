@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -48,8 +46,8 @@ public class PlayerController {
 	}
 
 	@GetMapping("/withBestResult")
-	public ResponseEntity<?> getPlayerWithMinBestAttemptsCount() {
-		return ResponseEntity.ok(this.playerService.getPlayersWithBestResult());
+	public ResponseEntity<?> getPlayerWithBestResult() {
+		return ResponseEntity.ok(this.playerService.getPlayerWithBestResult());
 	}
 
 	@PostMapping
@@ -64,16 +62,16 @@ public class PlayerController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PatchMapping("/{id}")
-	public ResponseEntity<?> patch(@PathVariable Long id, @RequestBody PlayerSummary player) {
-		this.playerService.patch(id, player);
-		return ResponseEntity.noContent().build();
-	}
-
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteById(@PathVariable Long id) {
-		this.playerService.deleteById(id);
-		return ResponseEntity.noContent().build();
-	}
+	// @PatchMapping("/{id}")
+	// public ResponseEntity<?> patch(@PathVariable Long id, @RequestBody PlayerSummary player) {
+	// this.playerService.patch(id, player);
+	// return ResponseEntity.noContent().build();
+	// }
+	//
+	// @DeleteMapping("/{id}")
+	// public ResponseEntity<?> deleteById(@PathVariable Long id) {
+	// this.playerService.deleteById(id);
+	// return ResponseEntity.noContent().build();
+	// }
 
 }

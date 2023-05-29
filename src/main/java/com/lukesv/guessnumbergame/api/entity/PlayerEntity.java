@@ -29,9 +29,9 @@ import lombok.Setter;
 @NamedQuery(name = "find_player_summary_by_username",
 query = "select new com.lukesv.guessnumbergame.api.dto.PlayerSummary(id, username, bestAttemptsCount) "
 		+ "from PlayerEntity where username = :username")
-@NamedQuery(name = "find_player_summaries_with_best_result",
+@NamedQuery(name = "find_player_summary_with_best_result",
 		query = "select new com.lukesv.guessnumbergame.api.dto.PlayerSummary(id, username, bestAttemptsCount)"
-				+ " from PlayerEntity order by bestAttemptsCount")
+				+ " from PlayerEntity order by bestAttemptsCount limit 1")
 @NamedQuery(name = "delete_player_by_id", query = "delete from PlayerEntity where id = :id")
 @NoArgsConstructor
 @Getter
@@ -45,7 +45,7 @@ public class PlayerEntity {
 	
 	public static final String JPQL_FIND_PLAYER_SUMMARY_BY_USERNAME = "find_player_summary_by_username";
 
-	public static final String JPQL_FIND_PLAYER_SUMMARIES_WITH_BEST_RESULT = "find_player_summaries_with_best_result";
+	public static final String JPQL_FIND_PLAYER_SUMMARY_WITH_BEST_RESULT = "find_player_summary_with_best_result";
 
 	public static final String JPQL_DELETE_PLAYER_BY_ID = "delete_player_by_id";
 

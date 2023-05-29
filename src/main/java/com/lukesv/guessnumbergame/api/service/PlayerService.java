@@ -12,7 +12,7 @@ public interface PlayerService {
 	
 	public PlayerSummary getByUsername(String username);
 
-	public List<PlayerSummary> getPlayersWithBestResult();
+	public PlayerSummary getPlayerWithBestResult();
 
 	public PlayerSummary create(PlayerSummary player);
 

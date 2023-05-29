@@ -1,4 +1,4 @@
-package com.lukesv.guessnumbergame.api.config;
+package com.lukesv.guessnumbergame.api.config.security;
 
 import java.util.Arrays;
 
@@ -15,48 +15,52 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
-public class LoginSecurityConfig {
+public class PlayerSecurityConfig {
 
 	@Bean
-	SecurityFilterChain loginSecurityFilterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain playerSecurityFilterChain(HttpSecurity http) throws Exception {
 		return http
-				.securityMatcher("/login/**")
+				.securityMatcher("/players/**")
 				.securityContext(securityContext -> securityContext
 						.requireExplicitSave(true))
 				.cors(cors -> cors
-						.configurationSource(loginCorsConfigurationSource()))
+						.configurationSource(playerCorsConfigurationSource()))
 				.csrf(csrf -> csrf
-						.disable())
+						.ignoringRequestMatchers(request -> request.getMethod().equals("POST")))
 				.logout(logout -> logout
 						.disable())
 				.httpBasic(httpBasic -> httpBasic
-						.authenticationEntryPoint(loginAuthenticationEntryPoint()))
+						.authenticationEntryPoint(playerAuthenticationEntryPoint()))
 				.anonymous(anonymous -> anonymous
 						.disable())
 				.sessionManagement(sessionManagement -> sessionManagement
 						.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
 				.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-						.requestMatchers(HttpMethod.POST, "/login").permitAll())
+						.requestMatchers(HttpMethod.GET, "/players/**").permitAll()
+						.requestMatchers(HttpMethod.POST, "/players").permitAll()
+						.requestMatchers(HttpMethod.PUT, "/players/**").hasRole("USER"))
 				.build();
 	}
 
 	@Bean
-	CorsConfigurationSource loginCorsConfigurationSource() {
+	CorsConfigurationSource playerCorsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500"));
-		configuration.setAllowedMethods(Arrays.asList("POST"));
-		configuration.setAllowedHeaders(Arrays.asList("Authorization"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT"));
+		configuration.setAllowedHeaders(Arrays.asList("Content-Type", "X-CSRF-TOKEN"));
+		configuration.setExposedHeaders(Arrays.asList("Location"));
 		configuration.setAllowCredentials(true);
 		configuration.setMaxAge(3600L);
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/login/**", configuration);
+		source.registerCorsConfiguration("/players/**", configuration);
 		return source;
 	}
 
 	@Bean
-	AuthenticationEntryPoint loginAuthenticationEntryPoint() {
+	AuthenticationEntryPoint playerAuthenticationEntryPoint() {
 		return (request, response, e) -> {
 			response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
 		};
 	}
+
 }

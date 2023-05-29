@@ -44,8 +44,9 @@ public class DefaultPlayerService implements PlayerService {
 	}
 
 	@Override
-	public List<PlayerSummary> getPlayersWithBestResult() {
-		return this.playerRepository.findPlayerSummariesWithBestResult();
+	public PlayerSummary getPlayerWithBestResult() {
+		return this.playerRepository.findPlayerSummaryWithBestResult()
+				.orElseThrow(() -> new PlayerNotFoundException());
 	}
 
 	@Override

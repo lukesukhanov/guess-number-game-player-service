@@ -1,4 +1,4 @@
-package com.lukesv.guessnumbergame.api.config;
+package com.lukesv.guessnumbergame.api.config.security;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
