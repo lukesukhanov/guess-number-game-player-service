@@ -9,10 +9,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -20,24 +22,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lukesukhanov.guessnumbergame.playerapi.config.test.PlayersBuilder;
+import com.lukesv.guessnumbergame.api.Application;
 import com.lukesv.guessnumbergame.api.dto.PlayerSummary;
 import com.lukesv.guessnumbergame.api.exception.PlayerNotFoundException;
 import com.lukesv.guessnumbergame.api.service.PlayerService;
 
-@SpringBootTest
+@SpringBootTest(classes = Application.class)
 @Tag("controller")
 @DisplayName("PlayerController")
 @AutoConfigureMockMvc
-@Import(PlayersBuilder.class)
 class PlayerControllerTest {
+
+	private static List<PlayerSummary> players;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -45,16 +47,22 @@ class PlayerControllerTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
-	@Autowired
-	private List<PlayerSummary> players;
-
 	@MockBean
 	private PlayerService playerService;
+
+	@BeforeAll
+	static void initializePlayers() {
+		List<PlayerSummary> players = new ArrayList<>();
+		players.add(new PlayerSummary(1l, "username1", 1));
+		players.add(new PlayerSummary(2l, "username2", 2));
+		players.add(new PlayerSummary(3l, "username3", 3));
+		PlayerControllerTest.players = Collections.unmodifiableList(players);
+	}
 
 	@Test
 	@DisplayName("getAll() - normal return")
 	final void getAll_normalReturn() throws Exception {
-		when(this.playerService.getAll()).thenReturn(this.players);
+		when(this.playerService.getAll()).thenReturn(PlayerControllerTest.players);
 		this.mockMvc.perform(get("/players")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpectAll(
@@ -130,7 +138,7 @@ class PlayerControllerTest {
 	@Test
 	@DisplayName("getPlayerWithBestResult() - normal return")
 	final void getPlayerWithBestResult_normalReturn() throws Exception {
-		PlayerSummary playerWithBestResult = this.players.get(0);
+		PlayerSummary playerWithBestResult = PlayerControllerTest.players.get(0);
 		when(this.playerService.getPlayerWithBestResult()).thenReturn(playerWithBestResult);
 		this.mockMvc.perform(get("/players/withBestResult")
 				.accept(MediaType.APPLICATION_JSON))
@@ -200,6 +208,20 @@ class PlayerControllerTest {
 	}
 
 	@Test
+	@DisplayName("update() - unauthenticated")
+	final void update_unauthenticated() throws Exception {
+		PlayerSummary player = new PlayerSummary(1L, "username", 1);
+		when(this.playerService.create(player)).thenReturn(player);
+		this.mockMvc.perform(put("/players/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.with(csrf().asHeader())
+				.content(this.objectMapper.writeValueAsString(player)))
+				.andExpectAll(
+						status().isUnauthorized());
+	}
+
+	@Test
 	@DisplayName("update() - missing CSRF token")
 	@WithMockUser(roles = "USER")
 	final void update_missingCsrfToken() throws Exception {
@@ -226,20 +248,6 @@ class PlayerControllerTest {
 				.content(this.objectMapper.writeValueAsString(player)))
 				.andExpectAll(
 						status().isForbidden());
-	}
-
-	@Test
-	@DisplayName("update() - unauthenticated")
-	final void update_unauthenticated() throws Exception {
-		PlayerSummary player = new PlayerSummary(1L, "username", 1);
-		when(this.playerService.create(player)).thenReturn(player);
-		this.mockMvc.perform(put("/players/1")
-				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)
-				.with(csrf().asHeader())
-				.content(this.objectMapper.writeValueAsString(player)))
-				.andExpectAll(
-						status().isUnauthorized());
 	}
 
 	@Test

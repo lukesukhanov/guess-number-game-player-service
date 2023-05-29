@@ -6,19 +6,19 @@ import com.lukesv.guessnumbergame.api.dto.PlayerSummary;
 
 public interface PlayerService {
 
-	public List<PlayerSummary> getAll();
+	List<PlayerSummary> getAll();
 
-	public PlayerSummary getById(Long id);
-	
-	public PlayerSummary getByUsername(String username);
+	PlayerSummary getById(Long id);
 
-	public PlayerSummary getPlayerWithBestResult();
+	PlayerSummary getByUsername(String username);
 
-	public PlayerSummary create(PlayerSummary player);
+	PlayerSummary getPlayerWithBestResult();
 
-	public void update(Long id, PlayerSummary player);
-	
-	public void patch(Long id, PlayerSummary player);
+	PlayerSummary create(PlayerSummary player);
 
-	public void deleteById(Long id);
+	void update(Long id, PlayerSummary player);
+
+	// void patch(Long id, PlayerSummary player);
+	//
+	// void deleteById(Long id);
 }

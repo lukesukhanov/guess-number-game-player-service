@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class DefaultPlayerService implements PlayerService {
 
 	private final PlayerRepository playerRepository;
+
 	private final PlayerMapper playerMapper;
 
 	@Override
@@ -69,29 +70,28 @@ public class DefaultPlayerService implements PlayerService {
 		this.playerRepository.save(playerEntity);
 	}
 
-	// Redundant method.
-	@PreAuthorize("hasRole('ADMIN')")
-	@Transactional
-	@Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 5,
-			backoff = @Backoff(delay = 100L), recover = "recoverPatch")
-	@Override
-	public void patch(Long id, PlayerSummary player) {
-		PlayerEntity playerEntity = this.playerRepository.findById(id)
-				.orElseThrow(() -> new PlayerNotFoundException(id));
-		if (player.getUsername() != null) {
-			playerEntity.setUsername(player.getUsername());
-		}
-		if (player.getBestAttemptsCount() != null) {
-			playerEntity.setBestAttemptsCount(player.getBestAttemptsCount());
-		}
-		this.playerRepository.save(playerEntity);
-	}
-
-	@PreAuthorize("hasRole('ADMIN')")
-	@Override
-	public void deleteById(Long id) {
-		this.playerRepository.deleteById(id);
-	}
+	// @PreAuthorize("hasRole('ADMIN')")
+	// @Transactional
+	// @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 5,
+	// backoff = @Backoff(delay = 100L), recover = "recoverPatch")
+	// @Override
+	// public void patch(Long id, PlayerSummary player) {
+	// PlayerEntity playerEntity = this.playerRepository.findById(id)
+	// .orElseThrow(() -> new PlayerNotFoundException(id));
+	// if (player.getUsername() != null) {
+	// playerEntity.setUsername(player.getUsername());
+	// }
+	// if (player.getBestAttemptsCount() != null) {
+	// playerEntity.setBestAttemptsCount(player.getBestAttemptsCount());
+	// }
+	// this.playerRepository.save(playerEntity);
+	// }
+	//
+	// @PreAuthorize("hasRole('ADMIN')")
+	// @Override
+	// public void deleteById(Long id) {
+	// this.playerRepository.deleteById(id);
+	// }
 
 	@Recover
 	private void recoverUpdate(ObjectOptimisticLockingFailureException e, Long id,
@@ -99,9 +99,9 @@ public class DefaultPlayerService implements PlayerService {
 		throw new PlayerNotUpdatedException(id);
 	}
 
-	@Recover
-	private void recoverPatch(ObjectOptimisticLockingFailureException e, Long id,
-			PlayerSummary player) {
-		throw new PlayerNotUpdatedException(id);
-	}
+	// @Recover
+	// private void recoverPatch(ObjectOptimisticLockingFailureException e, Long id,
+	// PlayerSummary player) {
+	// throw new PlayerNotUpdatedException(id);
+	// }
 }
