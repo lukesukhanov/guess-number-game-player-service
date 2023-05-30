@@ -1,0 +1,28 @@
+spring:
+   datasource:
+      url: jdbc:postgresql://localhost:5432/postgres?currentSchema=guess_my_number_game_dev
+   jpa:
+      show-sql: true
+      properties:
+         hibernate:
+            format_sql: true
+   liquibase:
+      drop-first: true
+      default-schema: guess_my_number_game_dev
+      change-log: classpath:/db/changelog/db.changelog-dev.yml
+logging:
+   level:
+      root: INFO
+      org.springframework:
+         security: TRACE
+         transaction.interceptor: TRACE
+      org.hibernate:
+         type: TRACE
+         stat: TRACE
+   file:
+      path: /logs/
+      name: App.log
+app:
+   security:
+      db:
+         addUsers: true

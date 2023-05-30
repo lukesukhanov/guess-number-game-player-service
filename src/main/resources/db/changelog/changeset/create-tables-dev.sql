@@ -1,6 +1,9 @@
---changeset Luke Sukhanov:create-tables
+--changeset lukesukhanov:create-tables-dev
 
-SET search_path TO guess_my_number_game;
+DROP SCHEMA IF EXISTS guess_my_number_game_dev CASCADE;
+CREATE SCHEMA guess_my_number_game_dev;
+
+SET search_path TO guess_my_number_game_dev;
 
 -------- Sequences  --------
 

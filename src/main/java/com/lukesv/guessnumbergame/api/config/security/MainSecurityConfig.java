@@ -3,6 +3,7 @@ package com.lukesv.guessnumbergame.api.config.security;
 import javax.sql.DataSource;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,6 +29,7 @@ public class MainSecurityConfig {
 	}
 
 	@Bean
+	@ConditionalOnProperty("app.security.db.addUsers")
 	CommandLineRunner addUsers(UserDetailsManager userDetailsManager, PasswordEncoder passwordEncoder,
 			PlayerService playerService, PlayerMapper playerMapper) {
 		return args -> {
