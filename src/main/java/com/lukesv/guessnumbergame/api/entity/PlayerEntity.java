@@ -27,11 +27,11 @@ import lombok.Setter;
 		query = "select new com.lukesv.guessnumbergame.api.dto.PlayerSummary(id, username, bestAttemptsCount) "
 				+ "from PlayerEntity where id = :id")
 @NamedQuery(name = "find_player_summary_by_username",
-query = "select new com.lukesv.guessnumbergame.api.dto.PlayerSummary(id, username, bestAttemptsCount) "
-		+ "from PlayerEntity where username = :username")
+		query = "select new com.lukesv.guessnumbergame.api.dto.PlayerSummary(id, username, bestAttemptsCount) "
+				+ "from PlayerEntity where username = :username")
 @NamedQuery(name = "find_player_summaries_with_best_result",
 		query = "select new com.lukesv.guessnumbergame.api.dto.PlayerSummary(id, username, bestAttemptsCount)"
-				+ " from PlayerEntity order by bestAttemptsCount")
+				+ " from PlayerEntity where bestAttemptsCount = (select min(bestAttemptsCount) from PlayerEntity)")
 @NamedQuery(name = "delete_player_by_id", query = "delete from PlayerEntity where id = :id")
 @NoArgsConstructor
 @Getter
@@ -42,7 +42,7 @@ public class PlayerEntity {
 	public static final String JPQL_FIND_ALL_PLAYER_SUMMARIES = "find_all_player_summaries";
 
 	public static final String JPQL_FIND_PLAYER_SUMMARY_BY_ID = "find_player_summary_by_id";
-	
+
 	public static final String JPQL_FIND_PLAYER_SUMMARY_BY_USERNAME = "find_player_summary_by_username";
 
 	public static final String JPQL_FIND_PLAYER_SUMMARIES_WITH_BEST_RESULT = "find_player_summaries_with_best_result";
