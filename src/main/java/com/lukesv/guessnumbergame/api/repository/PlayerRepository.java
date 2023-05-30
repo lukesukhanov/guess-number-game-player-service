@@ -31,8 +31,8 @@ public interface PlayerRepository extends JpaRepository<PlayerEntity, Long> {
 	@Query(name = PlayerEntity.JPQL_FIND_PLAYER_SUMMARY_BY_USERNAME)
 	Optional<PlayerSummary> findPlayerSummaryByUsername(String username);
 
-	@Query(name = PlayerEntity.JPQL_FIND_PLAYER_SUMMARY_WITH_BEST_RESULT)
-	Optional<PlayerSummary> findPlayerSummaryWithBestResult();
+	@Query(name = PlayerEntity.JPQL_FIND_PLAYER_SUMMARIES_WITH_BEST_RESULT)
+	List<PlayerSummary> findPlayerSummariesWithBestResult();
 	
 	@Query(name = PlayerEntity.JPQL_DELETE_PLAYER_BY_ID)
 	@Modifying

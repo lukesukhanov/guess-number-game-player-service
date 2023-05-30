@@ -46,8 +46,8 @@ public class PlayerController {
 	}
 
 	@GetMapping("/withBestResult")
-	public ResponseEntity<?> getPlayerWithBestResult() {
-		return ResponseEntity.ok(this.playerService.getPlayerWithBestResult());
+	public ResponseEntity<?> getPlayersWithBestResult() {
+		return ResponseEntity.ok(this.playerService.getPlayersWithBestResult());
 	}
 
 	@PostMapping

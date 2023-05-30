@@ -101,17 +101,17 @@ class PlayerServiceTest {
 	}
 
 	@Test
-	@DisplayName("getPlayerWithBestResult() - normal return")
+	@DisplayName("getPlayersWithBestResult() - normal return")
 	final void getPlayerWithBestResult_normalReturn() throws Exception {
-		when(this.playerRepository.findPlayerSummaryWithBestResult()).thenReturn(Optional.of(this.player));
-		assertEquals(this.playerService.getPlayerWithBestResult(), this.player);
+		when(this.playerRepository.findPlayerSummariesWithBestResult()).thenReturn(this.players);
+		assertEquals(this.playerService.getPlayersWithBestResult(), this.players);
 	}
 
 	@Test
-	@DisplayName("getPlayerWithBestResult() - player not found")
-	final void getPlayerWithBestResult_playerNotFound() throws Exception {
-		when(this.playerRepository.findPlayerSummaryWithBestResult()).thenReturn(Optional.empty());
-		assertThrows(PlayerNotFoundException.class, () -> this.playerService.getPlayerWithBestResult());
+	@DisplayName("getPlayersWithBestResult() - empty return")
+	final void getPlayerWithBestResult_emptyReturn() throws Exception {
+		when(this.playerRepository.findPlayerSummariesWithBestResult()).thenReturn(Collections.emptyList());
+		assertEquals(this.playerService.getPlayersWithBestResult(), Collections.emptyList());
 	}
 
 	@Test

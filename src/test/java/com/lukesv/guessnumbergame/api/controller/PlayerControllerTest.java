@@ -136,29 +136,34 @@ class PlayerControllerTest {
 	}
 
 	@Test
-	@DisplayName("getPlayerWithBestResult() - normal return")
+	@DisplayName("getPlayersWithBestResult() - normal return")
 	final void getPlayerWithBestResult_normalReturn() throws Exception {
-		PlayerSummary playerWithBestResult = PlayerControllerTest.players.get(0);
-		when(this.playerService.getPlayerWithBestResult()).thenReturn(playerWithBestResult);
+		int bestResult = PlayerControllerTest.players.stream()
+				.mapToInt(PlayerSummary::getBestAttemptsCount)
+				.min()
+				.getAsInt();
+		List<PlayerSummary> playersWithBestResult = PlayerControllerTest.players.stream()
+				.filter(player -> player.getBestAttemptsCount() == bestResult)
+				.toList();
+		when(this.playerService.getPlayersWithBestResult()).thenReturn(playersWithBestResult);
 		this.mockMvc.perform(get("/players/withBestResult")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpectAll(
 						status().isOk(),
 						content().contentType(MediaType.APPLICATION_JSON),
-						content().string(this.objectMapper.writeValueAsString(playerWithBestResult)));
+						content().string(this.objectMapper.writeValueAsString(playersWithBestResult)));
 	}
 
 	@Test
-	@DisplayName("getPlayerWithBestResult() - player not found")
-	final void getPlayerWithBestResult_playerNotFound() throws Exception {
-		PlayerNotFoundException e = new PlayerNotFoundException();
-		when(this.playerService.getPlayerWithBestResult()).thenThrow(e);
+	@DisplayName("getPlayersWithBestResult() - empty return")
+	final void getPlayerWithBestResult_emptyReturn() throws Exception {
+		when(this.playerService.getPlayersWithBestResult()).thenReturn(Collections.emptyList());
 		this.mockMvc.perform(get("/players/withBestResult")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpectAll(
-						status().isNotFound(),
+						status().isOk(),
 						content().contentType(MediaType.APPLICATION_JSON),
-						content().string(this.objectMapper.writeValueAsString(Map.of("error", e.getMessage()))));
+						content().string(this.objectMapper.writeValueAsString(Collections.emptyList())));
 	}
 
 	@Test
