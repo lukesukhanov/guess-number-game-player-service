@@ -62,4 +62,5 @@ public class CsrfTokenSecurityConfig {
 			response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
 		};
 	}
+
 }

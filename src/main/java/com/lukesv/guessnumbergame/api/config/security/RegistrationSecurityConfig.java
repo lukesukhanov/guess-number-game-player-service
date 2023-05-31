@@ -46,4 +46,5 @@ public class RegistrationSecurityConfig {
 		source.registerCorsConfiguration("/register", configuration);
 		return source;
 	}
+
 }

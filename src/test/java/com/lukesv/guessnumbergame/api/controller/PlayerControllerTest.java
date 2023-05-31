@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -39,7 +38,15 @@ import com.lukesv.guessnumbergame.api.service.PlayerService;
 @AutoConfigureMockMvc
 class PlayerControllerTest {
 
-	private static List<PlayerSummary> players;
+	private static final List<PlayerSummary> expectedPlayers;
+
+	static {
+		List<PlayerSummary> players = new ArrayList<>();
+		players.add(new PlayerSummary(1l, "username1", 1));
+		players.add(new PlayerSummary(2l, "username2", 2));
+		players.add(new PlayerSummary(3l, "username3", 3));
+		expectedPlayers = Collections.unmodifiableList(players);
+	}
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -50,19 +57,10 @@ class PlayerControllerTest {
 	@MockBean
 	private PlayerService playerService;
 
-	@BeforeAll
-	static void initializePlayers() {
-		List<PlayerSummary> players = new ArrayList<>();
-		players.add(new PlayerSummary(1l, "username1", 1));
-		players.add(new PlayerSummary(2l, "username2", 2));
-		players.add(new PlayerSummary(3l, "username3", 3));
-		PlayerControllerTest.players = Collections.unmodifiableList(players);
-	}
-
 	@Test
 	@DisplayName("getAll() - normal return")
 	final void getAll_normalReturn() throws Exception {
-		when(this.playerService.getAll()).thenReturn(PlayerControllerTest.players);
+		when(this.playerService.getAll()).thenReturn(expectedPlayers);
 		this.mockMvc.perform(get("/players")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpectAll(
@@ -138,11 +136,11 @@ class PlayerControllerTest {
 	@Test
 	@DisplayName("getPlayersWithBestResult() - normal return")
 	final void getPlayerWithBestResult_normalReturn() throws Exception {
-		int bestResult = PlayerControllerTest.players.stream()
+		int bestResult = expectedPlayers.stream()
 				.mapToInt(PlayerSummary::getBestAttemptsCount)
 				.min()
 				.getAsInt();
-		List<PlayerSummary> playersWithBestResult = PlayerControllerTest.players.stream()
+		List<PlayerSummary> playersWithBestResult = expectedPlayers.stream()
 				.filter(player -> player.getBestAttemptsCount() == bestResult)
 				.toList();
 		when(this.playerService.getPlayersWithBestResult()).thenReturn(playersWithBestResult);
@@ -269,4 +267,5 @@ class PlayerControllerTest {
 				.andExpectAll(
 						status().isForbidden());
 	}
+
 }

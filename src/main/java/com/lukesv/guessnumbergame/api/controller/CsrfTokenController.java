@@ -14,4 +14,5 @@ public class CsrfTokenController {
 	ResponseEntity<?> sendCsrfToken(CsrfToken csrfToken) {
 		return ResponseEntity.ok().header(csrfToken.getHeaderName(), csrfToken.getToken()).build();
 	}
+
 }

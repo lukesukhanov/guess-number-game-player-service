@@ -24,4 +24,5 @@ public class LoginController {
 		}
 		return ResponseEntity.noContent().build();
 	}
+
 }

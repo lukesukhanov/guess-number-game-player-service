@@ -61,4 +61,5 @@ public class DefaultResponseEntityExceptionHandler extends ResponseEntityExcepti
 		HttpHeaders headers = new HttpHeaders();
 		return handleExceptionInternal(e, responseBody, headers, HttpStatus.BAD_REQUEST, request);
 	}
+
 }

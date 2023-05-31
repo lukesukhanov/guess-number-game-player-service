@@ -59,4 +59,5 @@ public class LoginSecurityConfig {
 			response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
 		};
 	}
+
 }
