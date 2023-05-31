@@ -7,11 +7,11 @@ public class PlayerNotFoundException extends RuntimeException {
 	public PlayerNotFoundException(Long id) {
 		super("Can't find player with id = " + id);
 	}
-	
+
 	public PlayerNotFoundException(String username) {
 		super("Can't find player with username '%s'".formatted(username));
 	}
-	
+
 	public PlayerNotFoundException() {
 		super("Can't find any player");
 	}

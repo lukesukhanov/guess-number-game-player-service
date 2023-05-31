@@ -28,4 +28,5 @@ public class ErrorSecurityConfig {
 						.requestMatchers("/error").permitAll())
 				.build();
 	}
+
 }

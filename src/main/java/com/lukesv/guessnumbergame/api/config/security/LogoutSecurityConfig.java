@@ -78,4 +78,5 @@ public class LogoutSecurityConfig {
 			response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
 		};
 	}
+
 }

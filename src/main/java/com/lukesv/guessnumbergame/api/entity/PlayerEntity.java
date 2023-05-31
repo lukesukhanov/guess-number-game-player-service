@@ -30,9 +30,9 @@ import lombok.Setter;
 		query = "select new com.lukesv.guessnumbergame.api.dto.PlayerSummary(id, username, bestAttemptsCount) "
 				+ "from PlayerEntity where username = :username")
 @NamedQuery(name = "find_player_summaries_with_best_result",
-		query = "select new com.lukesv.guessnumbergame.api.dto.PlayerSummary(id, username, bestAttemptsCount)"
-				+ " from PlayerEntity where bestAttemptsCount = (select min(bestAttemptsCount) from PlayerEntity)")
-@NamedQuery(name = "delete_player_by_id", query = "delete from PlayerEntity where id = :id")
+		query = "select new com.lukesv.guessnumbergame.api.dto.PlayerSummary(id, username, bestAttemptsCount) "
+				+ "from PlayerEntity where bestAttemptsCount = (select min(bestAttemptsCount) from PlayerEntity)")
+// @NamedQuery(name = "delete_player_by_id", query = "delete from PlayerEntity where id = :id")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -47,7 +47,7 @@ public class PlayerEntity {
 
 	public static final String JPQL_FIND_PLAYER_SUMMARIES_WITH_BEST_RESULT = "find_player_summaries_with_best_result";
 
-	public static final String JPQL_DELETE_PLAYER_BY_ID = "delete_player_by_id";
+	// public static final String JPQL_DELETE_PLAYER_BY_ID = "delete_player_by_id";
 
 	@Id
 	@SequenceGenerator(name = "common_id_seq", sequenceName = "COMMON_ID_SEQ",

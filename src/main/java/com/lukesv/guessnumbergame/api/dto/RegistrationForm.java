@@ -34,4 +34,5 @@ public final class RegistrationForm implements Serializable {
 		String hashedPassword = passwordEncoder.encode(password);
 		return new User(username, hashedPassword);
 	}
+
 }

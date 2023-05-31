@@ -39,4 +39,5 @@ public class RegistrationController {
 		PlayerSummary savedPlayer = this.playerService.create(player);
 		return ResponseEntity.created(URI.create("/players/" + savedPlayer.getId())).body(savedPlayer);
 	}
+
 }

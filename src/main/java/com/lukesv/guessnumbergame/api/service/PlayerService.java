@@ -21,4 +21,5 @@ public interface PlayerService {
 	// void patch(Long id, PlayerSummary player);
 	//
 	// void deleteById(Long id);
+
 }

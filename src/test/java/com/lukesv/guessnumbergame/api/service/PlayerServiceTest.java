@@ -167,4 +167,5 @@ class PlayerServiceTest {
 		assertThrows(AuthenticationCredentialsNotFoundException.class,
 				() -> this.playerService.update(this.player.getId(), this.player));
 	}
+
 }

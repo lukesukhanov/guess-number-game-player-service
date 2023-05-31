@@ -103,4 +103,5 @@ public class DefaultPlayerService implements PlayerService {
 	// PlayerSummary player) {
 	// throw new PlayerNotUpdatedException(id);
 	// }
+
 }

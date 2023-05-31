@@ -13,14 +13,15 @@ import com.lukesv.guessnumbergame.api.entity.PlayerEntity;
 @Component
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface PlayerMapper {
-	
+
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "version", ignore = true)
 	PlayerEntity playerSummaryToPlayerEntity(PlayerSummary playerSummary);
 
-	List<PlayerEntity> playerSummaryToPlayerEntity(List<PlayerSummary> playerSummaryies);
+	List<PlayerEntity> playerSummaryToPlayerEntity(List<PlayerSummary> playerSummaries);
 
 	PlayerSummary playerEntityToPlayerSummary(PlayerEntity playerEntity);
 
 	List<PlayerSummary> playerEntityToPlayerSummary(List<PlayerEntity> playerEntities);
+
 }
