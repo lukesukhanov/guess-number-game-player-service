@@ -1,15 +1,13 @@
---changeset lukesukhanov:create-tables-dev
+--changeset lukesukhanov:create-tables-prod
 
-DROP SCHEMA IF EXISTS guess_my_number_game_dev CASCADE;
-CREATE SCHEMA guess_my_number_game_dev;
+CREATE SCHEMA IF NOT EXISTS guess_my_number_game;
 
-SET search_path TO guess_my_number_game_dev;
+SET search_path TO guess_my_number_game;
 
 -------- Sequences  --------
 
 -- Single sequence for all 'id' columns
-DROP SEQUENCE IF EXISTS common_id_seq CASCADE;
-CREATE SEQUENCE common_id_seq
+CREATE SEQUENCE IF NOT EXISTS common_id_seq
 	AS bigint
 	MINVALUE 1
 	START 1
@@ -19,8 +17,7 @@ CREATE SEQUENCE common_id_seq
 -------- Trigger functions  --------
 
 -- Trigger function for synchronizing 'created' column during INSERT
-DROP FUNCTION IF EXISTS sync_insert_created_column CASCADE;
-CREATE FUNCTION sync_insert_created_column() RETURNS trigger AS
+CREATE OR REPLACE FUNCTION sync_insert_created_column() RETURNS trigger AS
 $$
 BEGIN
 	NEW.created := now();
@@ -30,8 +27,7 @@ $$
 LANGUAGE plpgsql;
 
 -- Trigger function for synchronizing 'created' column during UPDATE
-DROP FUNCTION IF EXISTS sync_update_created_column CASCADE;
-CREATE FUNCTION sync_update_created_column() RETURNS trigger AS
+CREATE OR REPLACE FUNCTION sync_update_created_column() RETURNS trigger AS
 $$
 BEGIN
 	NEW.created := OLD.created;
@@ -41,8 +37,7 @@ $$
 LANGUAGE plpgsql;
 
 -- Trigger function for synchronizing 'last_modified' column during INSERT and UPDATE
-DROP FUNCTION IF EXISTS sync_update_last_modified_column CASCADE;
-CREATE FUNCTION sync_update_last_modified_column() RETURNS trigger AS
+CREATE OR REPLACE FUNCTION sync_update_last_modified_column() RETURNS trigger AS
 $$
 BEGIN
 	NEW.last_modified := now();
@@ -52,8 +47,7 @@ $$
 LANGUAGE plpgsql;
 
 -- Trigger function for synchronizing 'version' column during INSERT
-DROP FUNCTION IF EXISTS sync_insert_version_column CASCADE;
-CREATE FUNCTION sync_insert_version_column() RETURNS trigger AS
+CREATE OR REPLACE FUNCTION sync_insert_version_column() RETURNS trigger AS
 $$
 BEGIN
 	NEW.version := 1;
@@ -63,8 +57,7 @@ $$
 LANGUAGE plpgsql;
 
 -- Trigger function for synchronizing 'version' column during UPDATE
-DROP FUNCTION IF EXISTS sync_update_version_column CASCADE;
-CREATE FUNCTION sync_update_version_column() RETURNS trigger AS
+CREATE OR REPLACE FUNCTION sync_update_version_column() RETURNS trigger AS
 $$
 BEGIN
 	NEW.version := OLD.version + 1;
@@ -75,9 +68,8 @@ LANGUAGE plpgsql;
 
 -------- 'player' table  --------
 
--- Create a table
-DROP TABLE IF EXISTS player CASCADE;
-CREATE TABLE player (
+-- Table
+CREATE TABLE IF NOT EXISTS player (
 	id bigint NOT NULL PRIMARY KEY DEFAULT nextval('common_id_seq'),
 	username varchar NOT NULL UNIQUE,
 	best_attempts_count integer CHECK(best_attempts_count > 0),
@@ -87,7 +79,7 @@ CREATE TABLE player (
 );
 
 -- Trigger for inserting the 'created' column
-DROP TRIGGER IF EXISTS sync_insert_created_column ON player CASCADE;
+DROP TRIGGER IF EXISTS sync_insert_created_column ON player;
 CREATE TRIGGER sync_insert_created_column
 	BEFORE INSERT
 	ON player
@@ -95,7 +87,7 @@ CREATE TRIGGER sync_insert_created_column
 	EXECUTE FUNCTION sync_insert_created_column();
 
 -- Trigger for updating the 'created' column
-DROP TRIGGER IF EXISTS sync_update_created_column ON player CASCADE;
+DROP TRIGGER IF EXISTS sync_update_created_column ON player;
 CREATE TRIGGER sync_update_created_column
 	BEFORE UPDATE
 	ON player
@@ -103,7 +95,7 @@ CREATE TRIGGER sync_update_created_column
 	EXECUTE FUNCTION sync_update_created_column();
 
 -- Trigger for inserting the 'last_modified' column
-DROP TRIGGER IF EXISTS sync_update_last_modified_column ON player CASCADE;
+DROP TRIGGER IF EXISTS sync_update_last_modified_column ON player;
 CREATE TRIGGER sync_update_last_modified_column
 	BEFORE INSERT
 	ON player
@@ -111,7 +103,7 @@ CREATE TRIGGER sync_update_last_modified_column
 	EXECUTE FUNCTION sync_update_last_modified_column();
 
 -- Trigger for updating the 'last_modified' column
-DROP TRIGGER IF EXISTS sync_update_last_modified_column ON player CASCADE;
+DROP TRIGGER IF EXISTS sync_update_last_modified_column ON player;
 CREATE TRIGGER sync_update_last_modified_column
 	BEFORE UPDATE
 	ON player
@@ -119,7 +111,7 @@ CREATE TRIGGER sync_update_last_modified_column
 	EXECUTE FUNCTION sync_update_last_modified_column();
 
 -- Trigger for synchronizing 'version' column
-DROP TRIGGER IF EXISTS sync_insert_version_column ON player CASCADE;
+DROP TRIGGER IF EXISTS sync_insert_version_column ON player;
 CREATE TRIGGER sync_insert_version_column
 	BEFORE INSERT
 	ON player
@@ -127,7 +119,7 @@ CREATE TRIGGER sync_insert_version_column
 	EXECUTE FUNCTION sync_insert_version_column();
 
 -- Trigger for synchronizing 'version' column
-DROP TRIGGER IF EXISTS sync_update_version_column ON player CASCADE;
+DROP TRIGGER IF EXISTS sync_update_version_column ON player;
 CREATE TRIGGER sync_update_version_column
 	BEFORE UPDATE
 	ON player
@@ -136,9 +128,8 @@ CREATE TRIGGER sync_update_version_column
 
 -------- 'users' table  --------
 
--- Create a table
-DROP TABLE IF EXISTS users CASCADE;
-CREATE TABLE users (
+-- Table
+CREATE TABLE IF NOT EXISTS users (
 	username varchar NOT NULL PRIMARY KEY,
 	password varchar NOT NULL,
 	enabled boolean NOT NULL,
@@ -147,7 +138,7 @@ CREATE TABLE users (
 );
 
 -- Trigger for inserting the 'created' column
-DROP TRIGGER IF EXISTS sync_insert_created_column ON users CASCADE;
+DROP TRIGGER IF EXISTS sync_insert_created_column ON users;
 CREATE TRIGGER sync_insert_created_column
 	BEFORE INSERT
 	ON users
@@ -155,7 +146,7 @@ CREATE TRIGGER sync_insert_created_column
 	EXECUTE FUNCTION sync_insert_created_column();
 
 -- Trigger for updating the 'created' column
-DROP TRIGGER IF EXISTS sync_update_created_column ON users CASCADE;
+DROP TRIGGER IF EXISTS sync_update_created_column ON users;
 CREATE TRIGGER sync_update_created_column
 	BEFORE UPDATE
 	ON users
@@ -163,7 +154,7 @@ CREATE TRIGGER sync_update_created_column
 	EXECUTE FUNCTION sync_update_created_column();
 
 -- Trigger for inserting the 'last_modified' column
-DROP TRIGGER IF EXISTS sync_update_last_modified_column ON users CASCADE;
+DROP TRIGGER IF EXISTS sync_update_last_modified_column ON users;
 CREATE TRIGGER sync_update_last_modified_column
 	BEFORE INSERT
 	ON users
@@ -171,7 +162,7 @@ CREATE TRIGGER sync_update_last_modified_column
 	EXECUTE FUNCTION sync_update_last_modified_column();
 
 -- Trigger for updating the 'last_modified' column
-DROP TRIGGER IF EXISTS sync_update_last_modified_column ON users CASCADE;
+DROP TRIGGER IF EXISTS sync_update_last_modified_column ON users;
 CREATE TRIGGER sync_update_last_modified_column
 	BEFORE UPDATE
 	ON users
@@ -180,9 +171,8 @@ CREATE TRIGGER sync_update_last_modified_column
 
 -------- 'authorities' table  --------
 
--- Create a table
-DROP TABLE IF EXISTS authorities CASCADE;
-CREATE TABLE authorities (
+-- Table
+CREATE TABLE IF NOT EXISTS authorities (
 	username varchar NOT NULL REFERENCES users(username) ON DELETE CASCADE,
 	authority varchar NOT NULL,
 	created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -191,7 +181,7 @@ CREATE TABLE authorities (
 );
 
 -- Trigger for inserting the 'created' column
-DROP TRIGGER IF EXISTS sync_insert_created_column ON authorities CASCADE;
+DROP TRIGGER IF EXISTS sync_insert_created_column ON authorities;
 CREATE TRIGGER sync_insert_created_column
 	BEFORE INSERT
 	ON authorities
@@ -199,7 +189,7 @@ CREATE TRIGGER sync_insert_created_column
 	EXECUTE FUNCTION sync_insert_created_column();
 
 -- Trigger for updating the 'created' column
-DROP TRIGGER IF EXISTS sync_update_created_column ON authorities CASCADE;
+DROP TRIGGER IF EXISTS sync_update_created_column ON authorities;
 CREATE TRIGGER sync_update_created_column
 	BEFORE UPDATE
 	ON authorities
@@ -207,7 +197,7 @@ CREATE TRIGGER sync_update_created_column
 	EXECUTE FUNCTION sync_update_created_column();
 
 -- Trigger for inserting the 'last_modified' column
-DROP TRIGGER IF EXISTS sync_update_last_modified_column ON authorities CASCADE;
+DROP TRIGGER IF EXISTS sync_update_last_modified_column ON authorities;
 CREATE TRIGGER sync_update_last_modified_column
 	BEFORE INSERT
 	ON authorities
@@ -215,7 +205,7 @@ CREATE TRIGGER sync_update_last_modified_column
 	EXECUTE FUNCTION sync_update_last_modified_column();
 
 -- Trigger for updating the 'last_modified' column
-DROP TRIGGER IF EXISTS sync_update_last_modified_column ON authorities CASCADE;
+DROP TRIGGER IF EXISTS sync_update_last_modified_column ON authorities;
 CREATE TRIGGER sync_update_last_modified_column
 	BEFORE UPDATE
 	ON authorities
