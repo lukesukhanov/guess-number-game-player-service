@@ -24,5 +24,4 @@ logging:
       name: App.log
 app:
    security:
-      db:
-         addUsers: false
+      addAdminUser: false

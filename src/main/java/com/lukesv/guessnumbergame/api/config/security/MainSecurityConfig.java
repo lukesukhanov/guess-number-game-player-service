@@ -29,14 +29,12 @@ public class MainSecurityConfig {
 	}
 
 	@Bean
-	@ConditionalOnProperty("app.security.db.addUsers")
+	@ConditionalOnProperty("app.security.addAdminUser")
 	CommandLineRunner addUsers(UserDetailsManager userDetailsManager, PasswordEncoder passwordEncoder,
 			PlayerService playerService, PlayerMapper playerMapper) {
 		return args -> {
 			User admin = new User("admin", passwordEncoder.encode("admin"), "ROLE_ADMIN", "ROLE_USER");
 			userDetailsManager.createUser(admin);
-			User player = new User("vasya99", passwordEncoder.encode("vasya99"), "ROLE_USER");
-			userDetailsManager.createUser(player);
 		};
 	}
 
