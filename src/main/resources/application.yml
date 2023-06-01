@@ -23,7 +23,7 @@ spring:
          max-idle: 15
          default-auto-commit: true
    jpa:
-      database-platform: org.hibernate.dialect.PostgreSQL95Dialect
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
       open-in-view: false
       hibernate:
          ddl-auto: none
@@ -35,7 +35,7 @@ spring:
             max_fetch_depth: 3
             generate_statistics: false
             temp:
-               use_jdbc_metadata_defaults: false
+               use_jdbc_metadata_defaults: true
    liquibase:
       enabled: true
       liquibase-schema: public

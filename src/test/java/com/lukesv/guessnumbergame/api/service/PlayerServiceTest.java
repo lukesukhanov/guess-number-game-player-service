@@ -20,12 +20,13 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import com.lukesv.guessnumbergame.api.Application;
-import com.lukesv.guessnumbergame.api.dto.PlayerSummary;
-import com.lukesv.guessnumbergame.api.entity.PlayerEntity;
-import com.lukesv.guessnumbergame.api.exception.PlayerNotFoundException;
-import com.lukesv.guessnumbergame.api.mapper.PlayerMapper;
-import com.lukesv.guessnumbergame.api.repository.PlayerRepository;
+import com.guessnumbergame.api.Application;
+import com.guessnumbergame.api.dto.PlayerSummary;
+import com.guessnumbergame.api.entity.PlayerEntity;
+import com.guessnumbergame.api.exception.PlayerNotFoundException;
+import com.guessnumbergame.api.mapper.PlayerMapper;
+import com.guessnumbergame.api.repository.PlayerRepository;
+import com.guessnumbergame.api.service.PlayerService;
 
 @SpringBootTest(classes = Application.class)
 @Tag("service")

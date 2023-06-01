@@ -1,1 +1,0 @@
-package com.lukesv.guessnumbergame.api.entity;

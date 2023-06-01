@@ -15,9 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 
-import com.lukesv.guessnumbergame.api.Application;
+import com.guessnumbergame.api.Application;
+import com.guessnumbergame.api.dto.PlayerSummary;
+import com.guessnumbergame.api.repository.PlayerRepository;
 import com.lukesv.guessnumbergame.api.config.test.PlayerRepositoryTestConfig;
-import com.lukesv.guessnumbergame.api.dto.PlayerSummary;
 
 @SpringBootTest(classes = Application.class)
 @Tag("repository")

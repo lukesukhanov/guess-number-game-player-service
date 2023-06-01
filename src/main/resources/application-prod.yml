@@ -10,18 +10,6 @@ spring:
       drop-first: false
       default-schema: guess_my_number_game
       change-log: classpath:/db/changelog/db.changelog-prod.yml
-logging:
-   level:
-      root: INFO
-      org.springframework:
-         security: INFO
-         transaction.interceptor: INFO
-      org.hibernate:
-         type: INFO
-         stat: INFO
-   file:
-      path: /logs/
-      name: App.log
 app:
    security:
       addAdminUser: false
