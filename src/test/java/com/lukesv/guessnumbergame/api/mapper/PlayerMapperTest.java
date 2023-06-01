@@ -8,9 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.lukesv.guessnumbergame.api.Application;
-import com.lukesv.guessnumbergame.api.dto.PlayerSummary;
-import com.lukesv.guessnumbergame.api.entity.PlayerEntity;
+import com.guessnumbergame.api.Application;
+import com.guessnumbergame.api.dto.PlayerSummary;
+import com.guessnumbergame.api.entity.PlayerEntity;
+import com.guessnumbergame.api.mapper.PlayerMapper;
 
 @SpringBootTest(classes = Application.class)
 @Tag("mapper")

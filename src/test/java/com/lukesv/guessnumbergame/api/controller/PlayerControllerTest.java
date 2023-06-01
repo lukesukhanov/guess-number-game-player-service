@@ -27,10 +27,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lukesv.guessnumbergame.api.Application;
-import com.lukesv.guessnumbergame.api.dto.PlayerSummary;
-import com.lukesv.guessnumbergame.api.exception.PlayerNotFoundException;
-import com.lukesv.guessnumbergame.api.service.PlayerService;
+import com.guessnumbergame.api.Application;
+import com.guessnumbergame.api.dto.PlayerSummary;
+import com.guessnumbergame.api.exception.PlayerNotFoundException;
+import com.guessnumbergame.api.service.PlayerService;
 
 @SpringBootTest(classes = Application.class)
 @Tag("controller")
