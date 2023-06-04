@@ -10,7 +10,7 @@
 
 	<groupId>com.guessnumbergame</groupId>
 	<artifactId>guessnumbergame-api</artifactId>
-	<version>0.0-SNAPSHOT</version>
+	<version>1.0</version>
 	<packaging>war</packaging>
 
 	<name>guessnumbergame-api</name>
