@@ -14,14 +14,14 @@ import com.guessnumbergame.api.entity.PlayerEntity;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface PlayerMapper {
 
-	@Mapping(target = "id", ignore = true)
-	@Mapping(target = "version", ignore = true)
-	PlayerEntity playerSummaryToPlayerEntity(PlayerSummary playerSummary);
+  @Mapping(target = "id", ignore = true)
+  @Mapping(target = "version", ignore = true)
+  PlayerEntity playerSummaryToPlayerEntity(PlayerSummary playerSummary);
 
-	List<PlayerEntity> playerSummaryToPlayerEntity(List<PlayerSummary> playerSummaries);
+  List<PlayerEntity> playerSummaryToPlayerEntity(List<PlayerSummary> playerSummaries);
 
-	PlayerSummary playerEntityToPlayerSummary(PlayerEntity playerEntity);
+  PlayerSummary playerEntityToPlayerSummary(PlayerEntity playerEntity);
 
-	List<PlayerSummary> playerEntityToPlayerSummary(List<PlayerEntity> playerEntities);
+  List<PlayerSummary> playerEntityToPlayerSummary(List<PlayerEntity> playerEntities);
 
 }

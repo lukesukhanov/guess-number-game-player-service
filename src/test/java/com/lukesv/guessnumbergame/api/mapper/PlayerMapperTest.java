@@ -18,18 +18,18 @@ import com.guessnumbergame.api.mapper.PlayerMapper;
 @DisplayName("PlayerMapper")
 class PlayerMapperTest {
 
-	@Autowired
-	private PlayerMapper playerMapper;
+  @Autowired
+  private PlayerMapper playerMapper;
 
-	@Test
-	@DisplayName("playerSummaryToPlayerEntity() - ignores id")
-	final void test() {
-		PlayerSummary playerSummary = new PlayerSummary(1L, "ivan", 8);
-		PlayerEntity expectedPlayerEntity = new PlayerEntity();
-		expectedPlayerEntity.setUsername("ivan");
-		expectedPlayerEntity.setBestAttemptsCount(8);
-		PlayerEntity playerEntity = this.playerMapper.playerSummaryToPlayerEntity(playerSummary);
-		assertEquals(playerEntity, expectedPlayerEntity);
-	}
+  @Test
+  @DisplayName("playerSummaryToPlayerEntity() - ignores id")
+  final void test() {
+    PlayerSummary playerSummary = new PlayerSummary(1L, "ivan", 8);
+    PlayerEntity expectedPlayerEntity = new PlayerEntity();
+    expectedPlayerEntity.setUsername("ivan");
+    expectedPlayerEntity.setBestAttemptsCount(8);
+    PlayerEntity playerEntity = this.playerMapper.playerSummaryToPlayerEntity(playerSummary);
+    assertEquals(playerEntity, expectedPlayerEntity);
+  }
 
 }

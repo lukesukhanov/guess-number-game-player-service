@@ -16,79 +16,90 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * A user of the API.
+ * <p>
+ * The {@code equals} method should be used for comparisons.
+ * The {@code PlayerSummary} objects are compared by {@code username}.
+ * <p>
+ * This class is not immutable and should not be used concurrently.
+ * 
+ * @see RegistrationForm
+ */
 @NoArgsConstructor
 @Getter
 @EqualsAndHashCode(of = "username")
 public class User implements UserDetails {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@NotBlank(message = "Username is required")
-	protected String username;
+  @NotBlank(message = "Username is required")
+  protected String username;
 
-	@NotEmpty(message = "Password is required")
-	protected String password;
+  @NotEmpty(message = "Password is required")
+  protected String password;
 
-	@NotNull(message = "Property 'enabled' is required")
-	protected Boolean enabled = true;
+  @NotNull(message = "Property 'enabled' is required")
+  protected Boolean enabled = true;
 
-	protected Set<GrantedAuthority> authorities = new HashSet<>(4);
+  protected Set<GrantedAuthority> authorities = new HashSet<>(4);
 
-	public User(@NotBlank(message = "Username is required") String username,
-			@NotEmpty(message = "Password is required") String password) {
-		this.username = username;
-		this.password = password;
-		this.authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-	}
+  public User(@NotBlank(message = "Username is required") String username,
+      @NotEmpty(message = "Password is required") String password) {
+    this.username = username;
+    this.password = password;
+    this.authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+  }
 
-	public User(@NotBlank(message = "Username is required") String username,
-			@NotEmpty(message = "Password is required") String password, String... authorities) {
-		this.username = username;
-		this.password = password;
-		for (String authority : authorities) {
-			this.authorities.add(new SimpleGrantedAuthority(authority));
-		}
-	}
+  public User(@NotBlank(message = "Username is required") String username,
+      @NotEmpty(message = "Password is required") String password, String... authorities) {
+    this.username = username;
+    this.password = password;
+    for (String authority : authorities) {
+      this.authorities.add(new SimpleGrantedAuthority(authority));
+    }
+  }
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.unmodifiableSet(this.authorities);
-	}
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return Collections.unmodifiableSet(this.authorities);
+  }
 
-	@Override
-	public String getPassword() {
-		return this.password;
-	}
+  @Override
+  public String getPassword() {
+    return this.password;
+  }
 
-	@Override
-	public String getUsername() {
-		return this.username;
-	}
+  @Override
+  public String getUsername() {
+    return this.username;
+  }
 
-	@Override
-	public boolean isAccountNonExpired() {
-		return true;
-	}
+  @Override
+  public boolean isAccountNonExpired() {
+    return true;
+  }
 
-	@Override
-	public boolean isAccountNonLocked() {
-		return true;
-	}
+  @Override
+  public boolean isAccountNonLocked() {
+    return true;
+  }
 
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return true;
+  }
 
-	@Override
-	public boolean isEnabled() {
-		return this.enabled;
-	}
+  @Override
+  public boolean isEnabled() {
+    return this.enabled;
+  }
 
-	@Override
-	public String toString() {
-		return "User [username=%s, password=[PROTECTED], enabled=%b, authorities=%s]".formatted(this.username,
-				this.enabled, this.authorities);
-	}
+  @Override
+  public String toString() {
+    return "User [username=%s, password=[PROTECTED], enabled=%b, authorities=%s]".formatted(
+        this.username,
+        this.enabled, this.authorities);
+  }
 
 }
