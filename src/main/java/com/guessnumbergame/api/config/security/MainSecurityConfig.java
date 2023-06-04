@@ -21,25 +21,25 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MainSecurityConfig {
 
-	@Bean
-	UserDetailsManager defaultUserDetailsManager(DataSource dataSource) {
-		return new JdbcUserDetailsManager(dataSource);
-	}
+  @Bean
+  UserDetailsManager defaultUserDetailsManager(DataSource dataSource) {
+    return new JdbcUserDetailsManager(dataSource);
+  }
 
-	@Bean
-	PasswordEncoder defaultPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+  @Bean
+  PasswordEncoder defaultPasswordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
 
-	@Bean
-	@ConditionalOnProperty("app.security.addAdminUser")
-	CommandLineRunner addUsers(UserDetailsManager userDetailsManager, PasswordEncoder passwordEncoder,
-			PlayerService playerService, PlayerMapper playerMapper) {
-		return args -> {
-			User admin = new User("admin", passwordEncoder.encode("admin"), "ROLE_ADMIN", "ROLE_USER");
-			userDetailsManager.createUser(admin);
-			log.info("Created and saved user with admin authorities: {}", admin);
-		};
-	}
+  @Bean
+  @ConditionalOnProperty("app.security.addAdminUser")
+  CommandLineRunner addUsers(UserDetailsManager userDetailsManager, PasswordEncoder passwordEncoder,
+      PlayerService playerService, PlayerMapper playerMapper) {
+    return args -> {
+      User admin = new User("admin", passwordEncoder.encode("admin"), "ROLE_ADMIN", "ROLE_USER");
+      userDetailsManager.createUser(admin);
+      log.info("Created and saved user with admin authorities: {}", admin);
+    };
+  }
 
 }

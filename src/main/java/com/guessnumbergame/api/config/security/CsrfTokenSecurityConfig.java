@@ -20,47 +20,48 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CsrfTokenSecurityConfig {
 
-	@Bean
-	SecurityFilterChain csrfTokenSecurityFilterChain(HttpSecurity http) throws Exception {
-		return http
-				.securityMatcher("/csrfToken/**")
-				.securityContext(securityContext -> securityContext
-						.requireExplicitSave(true))
-				.cors(cors -> cors
-						.configurationSource(csrfTokenCorsConfigurationSource()))
-				.csrf(csrf -> csrf
-						.ignoringRequestMatchers("/csrfToken"))
-				.logout(logout -> logout
-						.disable())
-				.httpBasic(httpBasic -> httpBasic
-						.authenticationEntryPoint(this.csrfTokenAuthenticationEntryPoint()))
-				.anonymous(anonymous -> anonymous
-						.disable())
-				.sessionManagement(sessionManagement -> sessionManagement
-						.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-				.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-						.requestMatchers(HttpMethod.POST, "/csrfToken").hasRole("USER"))
-				.build();
-	}
+  @Bean
+  SecurityFilterChain csrfTokenSecurityFilterChain(HttpSecurity http) throws Exception {
+    return http
+        .securityMatcher("/csrfToken/**")
+        .securityContext(securityContext -> securityContext
+            .requireExplicitSave(true))
+        .cors(cors -> cors
+            .configurationSource(csrfTokenCorsConfigurationSource()))
+        .csrf(csrf -> csrf
+            .ignoringRequestMatchers("/csrfToken"))
+        .logout(logout -> logout
+            .disable())
+        .httpBasic(httpBasic -> httpBasic
+            .authenticationEntryPoint(this.csrfTokenAuthenticationEntryPoint()))
+        .anonymous(anonymous -> anonymous
+            .disable())
+        .sessionManagement(sessionManagement -> sessionManagement
+            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+        .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+            .requestMatchers(HttpMethod.POST, "/csrfToken").hasRole("USER"))
+        .build();
+  }
 
-	@Bean
-	CorsConfigurationSource csrfTokenCorsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500"));
-		configuration.setAllowedMethods(Arrays.asList("POST"));
-		configuration.setExposedHeaders(Arrays.asList("X-CSRF-TOKEN"));
-		configuration.setAllowCredentials(true);
-		configuration.setMaxAge(3600L);
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/csrfToken", configuration);
-		return source;
-	}
+  @Bean
+  CorsConfigurationSource csrfTokenCorsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500"));
+    configuration.setAllowedMethods(Arrays.asList("POST"));
+    configuration.setExposedHeaders(Arrays.asList("X-CSRF-TOKEN"));
+    configuration.setAllowCredentials(true);
+    configuration.setMaxAge(3600L);
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/csrfToken", configuration);
+    return source;
+  }
 
-	@Bean
-	AuthenticationEntryPoint csrfTokenAuthenticationEntryPoint() {
-		return (request, response, e) -> {
-			response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
-		};
-	}
+  @Bean
+  AuthenticationEntryPoint csrfTokenAuthenticationEntryPoint() {
+    return (request, response, e) -> {
+      response.sendError(HttpStatus.UNAUTHORIZED.value(),
+          HttpStatus.UNAUTHORIZED.getReasonPhrase());
+    };
+  }
 
 }

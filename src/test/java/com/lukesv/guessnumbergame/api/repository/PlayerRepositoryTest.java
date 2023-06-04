@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 
 import com.guessnumbergame.api.Application;
 import com.guessnumbergame.api.dto.PlayerSummary;
@@ -26,70 +27,85 @@ import com.lukesv.guessnumbergame.api.config.test.PlayerRepositoryTestConfig;
 @Import(PlayerRepositoryTestConfig.class)
 class PlayerRepositoryTest {
 
-	private static final List<PlayerSummary> expectedPlayers;
+  @Autowired
+  private PlayerRepository playerRepository;
 
-	private static final List<PlayerSummary> expectedPlayersWithBestResult;
+  private final List<PlayerSummary> existingPlayers;
 
-	@Autowired
-	private PlayerRepository playerRepository;
+  private final List<PlayerSummary> existingPlayersWithBestResult;
 
-	static {
-		PlayerSummary player1 = new PlayerSummary(null, "ivan", 8);
-		PlayerSummary player2 = new PlayerSummary(null, "pyotr", 5);
-		PlayerSummary player3 = new PlayerSummary(null, "nadezhda", 7);
-		PlayerSummary player4 = new PlayerSummary(null, "boris", 5);
-		PlayerSummary player5 = new PlayerSummary(null, "darya", null);
+  {
+    PlayerSummary player1 = new PlayerSummary(null, "ivan", 8);
+    PlayerSummary player2 = new PlayerSummary(null, "pyotr", 5);
+    PlayerSummary player3 = new PlayerSummary(null, "nadezhda", 7);
+    PlayerSummary player4 = new PlayerSummary(null, "boris", 5);
+    PlayerSummary player5 = new PlayerSummary(null, "darya", null);
 
-		List<PlayerSummary> players = new ArrayList<>(5);
-		Collections.addAll(players, player1, player2, player3, player4, player5);
-		expectedPlayers = Collections.unmodifiableList(players);
+    List<PlayerSummary> players = new ArrayList<>(5);
+    Collections.addAll(players, player1, player2, player3, player4, player5);
+    this.existingPlayers = Collections.unmodifiableList(players);
 
-		List<PlayerSummary> playersWithBestResult = new ArrayList<>(2);
-		Collections.addAll(playersWithBestResult, player2, player4);
-		expectedPlayersWithBestResult = Collections.unmodifiableList(playersWithBestResult);
-	}
+    List<PlayerSummary> playersWithBestResult = new ArrayList<>(2);
+    Collections.addAll(playersWithBestResult, player2, player4);
+    this.existingPlayersWithBestResult = Collections.unmodifiableList(playersWithBestResult);
+  }
 
-	@Test
-	@DisplayName("findAllPlayerSummaries() - normal return")
-	final void findAllPlayerSummaries_normalReturn() {
-		List<PlayerSummary> players = this.playerRepository.findAllPlayerSummaries();
-		assertTrue(players.containsAll(expectedPlayers) && expectedPlayers.containsAll(players));
-	}
+  @Test
+  @DisplayName("findAllPlayerSummaries() - normal return")
+  final void findAllPlayerSummaries_normalReturn() {
+    List<PlayerSummary> players = this.playerRepository.findAllPlayerSummaries();
+    assertTrue(
+        players.containsAll(this.existingPlayers) && this.existingPlayers.containsAll(players));
+  }
 
-	@Test
-	@DisplayName("findPlayerSummaryById() - normal return")
-	final void findPlayerSummaryById_normalReturn() {
-		PlayerSummary player = this.playerRepository.findPlayerSummaryById(1L).get();
-		assertEquals(player, expectedPlayers.get(0));
-	}
+  @Test
+  @DisplayName("findPlayerSummaryById(Long id) - normal return")
+  final void findPlayerSummaryById_normalReturn() {
+    PlayerSummary player = this.playerRepository.findPlayerSummaryById(1L).get();
+    assertEquals(player, this.existingPlayers.get(0));
+  }
 
-	@Test
-	@DisplayName("findPlayerSummaryById() - empty return")
-	final void findPlayerSummaryById_emptyReturn() {
-		Optional<PlayerSummary> player = this.playerRepository.findPlayerSummaryById(0L);
-		assertTrue(player.isEmpty());
-	}
+  @Test
+  @DisplayName("findPlayerSummaryById(Long id) - empty return")
+  final void findPlayerSummaryById_emptyReturn() {
+    Optional<PlayerSummary> player = this.playerRepository.findPlayerSummaryById(0L);
+    assertTrue(player.isEmpty());
+  }
 
-	@Test
-	@DisplayName("findPlayerSummaryByUsername() - normal return")
-	final void findPlayerSummaryByUsername_normalReturn() {
-		PlayerSummary player = this.playerRepository.findPlayerSummaryByUsername("ivan").get();
-		assertEquals(player, expectedPlayers.get(0));
-	}
+  @Test
+  @DisplayName("findPlayerSummaryByUsername(String username) - normal return")
+  final void findPlayerSummaryByUsername_normalReturn() {
+    PlayerSummary player = this.playerRepository.findPlayerSummaryByUsername("ivan").get();
+    assertEquals(player, this.existingPlayers.get(0));
+  }
 
-	@Test
-	@DisplayName("findPlayerSummaryByUsername() - empty return")
-	final void findPlayerSummaryByUsername_emptyReturn() {
-		Optional<PlayerSummary> player = this.playerRepository.findPlayerSummaryByUsername("12345");
-		assertTrue(player.isEmpty());
-	}
+  @Test
+  @DisplayName("findPlayerSummaryByUsername(String username) - empty return")
+  final void findPlayerSummaryByUsername_emptyReturn() {
+    Optional<PlayerSummary> player = this.playerRepository
+        .findPlayerSummaryByUsername("notExistingVasiliy");
+    assertTrue(player.isEmpty());
+  }
 
-	@Test
-	@DisplayName("findPlayerSummariesWithBestResult() - normal return")
-	final void findPlayerSummariesWithBestResult_normalReturn() {
-		List<PlayerSummary> playersWithBestResult = this.playerRepository.findPlayerSummariesWithBestResult();
-		assertTrue(playersWithBestResult.containsAll(expectedPlayersWithBestResult)
-				&& expectedPlayersWithBestResult.containsAll(playersWithBestResult));
-	}
+  @Test
+  @DisplayName("findPlayerSummariesWithBestResult() - normal return")
+  final void findPlayerSummariesWithBestResult_normalReturn() {
+    List<PlayerSummary> playersWithBestResult = this.playerRepository
+        .findPlayerSummariesWithBestResult();
+    assertTrue(playersWithBestResult.containsAll(this.existingPlayersWithBestResult)
+        && this.existingPlayersWithBestResult.containsAll(playersWithBestResult));
+  }
+
+  @Test
+  @DisplayName("deleteById(Long id) - normal return")
+  @DirtiesContext
+  final void deleteById_normalReturn() {
+    Long id = 1L;
+    Optional<PlayerSummary> player = this.playerRepository.findPlayerSummaryById(id);
+    assertTrue(player.isPresent());
+    this.playerRepository.deleteById(id);
+    player = this.playerRepository.findPlayerSummaryById(id);
+    assertTrue(player.isEmpty());
+  }
 
 }

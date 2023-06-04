@@ -12,27 +12,27 @@ import org.springframework.stereotype.Component;
 @Aspect
 public class ProfilingRestControllerMethodsAspect {
 
-	@Pointcut("execution(public * *(..))")
-	private void publicMethod() {
-	}
+  @Pointcut("execution(public * *(..))")
+  private void publicMethod() {
+  }
 
-	@Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
-	private void restControllerMethod() {
-	}
+  @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
+  private void restControllerMethod() {
+  }
 
-	@Around("publicMethod() && restControllerMethod()")
-	private Object profilingAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
-		Logger log = LoggerFactory.getLogger(joinPoint.getThis().getClass());
-		String methodName = joinPoint.getSignature().getName();
-		log.trace("Enter: {}() with arguments {}", methodName, joinPoint.getArgs());
-		try {
-			Object result = joinPoint.proceed();
-			log.trace("Exit: {}() with return value {}", methodName, result);
-			return result;
-		} catch (Throwable e) {
-			log.trace("Exit: {}() with exception {}", methodName, e.toString());
-			throw e;
-		}
-	}
+  @Around("publicMethod() && restControllerMethod()")
+  private Object profilingAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
+    Logger log = LoggerFactory.getLogger(joinPoint.getThis().getClass());
+    String methodName = joinPoint.getSignature().getName();
+    log.trace("Enter: {}, with arguments: {}", methodName, joinPoint.getArgs());
+    try {
+      Object result = joinPoint.proceed();
+      log.trace("Exit: {}, with return value: {}", methodName, result);
+      return result;
+    } catch (Throwable e) {
+      log.trace("Exit: {}, with exception: {}", methodName, e.toString());
+      throw e;
+    }
+  }
 
 }

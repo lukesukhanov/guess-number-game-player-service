@@ -14,19 +14,8 @@
 	<packaging>war</packaging>
 
 	<name>guessnumbergame-api</name>
-	<description>guessnumbergame-api</description>
+	<description>guessnumbergame api</description>
 	<url>https://github.com/lukesukhanov/guess-number-game-api</url>
-
-	<developers>
-		<developer>
-			<id>lukesukhanov</id>
-			<name>Luke Sukhanov</name>
-			<email>lukesukhanov@gmail.com</email>
-			<properties>
-				<active>true</active>
-			</properties>
-		</developer>
-	</developers>
 
 	<properties>
 		<java.version>17</java.version>
@@ -116,7 +105,6 @@
 	</dependencies>
 
 	<build>
-		<finalName>guessnumbergame-api</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
