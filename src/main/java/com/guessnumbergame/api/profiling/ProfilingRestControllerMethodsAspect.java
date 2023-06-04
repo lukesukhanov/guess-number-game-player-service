@@ -1,4 +1,4 @@
-package com.guessnumbergame.api.log;
+package com.guessnumbergame.api.profiling;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -6,21 +6,23 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 @Component
+@ConditionalOnProperty("app.profiling.restControllers")
 @Aspect
-public class ProfilingServiceMethodsAspect {
+public class ProfilingRestControllerMethodsAspect {
 
   @Pointcut("execution(public * *(..))")
   private void publicMethod() {
   }
 
-  @Pointcut("@within(org.springframework.stereotype.Service)")
-  private void serviceMethod() {
+  @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
+  private void restControllerMethod() {
   }
 
-  @Around("publicMethod() && serviceMethod()")
+  @Around("publicMethod() && restControllerMethod()")
   private Object profilingAdvice(ProceedingJoinPoint joinPoint) throws Throwable {
     Logger log = LoggerFactory.getLogger(joinPoint.getThis().getClass());
     String methodName = joinPoint.getSignature().getName();

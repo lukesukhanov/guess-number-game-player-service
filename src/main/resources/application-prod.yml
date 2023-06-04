@@ -13,3 +13,6 @@ spring:
 app:
    security:
       addAdminUser: false
+   profiling:
+      restControllers: false
+      services: false
