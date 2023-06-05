@@ -16,6 +16,8 @@ The API user can:
 <li>receive information about players with best result</li>
 </ul>
 
+Context path: /api
+
 Built with:
 <ul>
 <li>PostgreSQL</li>
