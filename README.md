@@ -114,7 +114,7 @@ Set-Cookie: JSESSIONID=; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:10 GMT; Path=
 
 ### Request
 
-GET /players/
+GET /players
 
 ### Response
 Status: 200
