@@ -9,12 +9,12 @@
 	</parent>
 
 	<groupId>com.guessnumbergame</groupId>
-	<artifactId>guessnumbergame-api</artifactId>
+	<artifactId>player-service</artifactId>
 	<version>1.0</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
-	<name>guessnumbergame-api</name>
-	<description>guessnumbergame api</description>
+	<name>player-service</name>
+	<description>guessnumbergame player service</description>
 	<url>https://github.com/lukesukhanov/guess-number-game-api</url>
 
 	<properties>
@@ -105,6 +105,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>player-service</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
