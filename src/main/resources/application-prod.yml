@@ -1,12 +1,8 @@
 server:
-  servlet:
-    session:
-      cookie:
-        same-site: Strict
-        secure: false
+  port: 80
 spring:
   datasource:
-    url: jdbc:postgresql://db:5432/postgres?currentSchema=guess_number_game
+    url: jdbc:postgresql://postgres:5432/postgres?currentSchema=guess_number_game
   jpa:
     show-sql: false
     properties:
@@ -19,7 +15,7 @@ spring:
 app:
   security:
     addAdminUser: false
-    cors-origins: '*'
+    cors-origins: http://127.0.0.1:8081
   profiling:
     restControllers: false
     services: false

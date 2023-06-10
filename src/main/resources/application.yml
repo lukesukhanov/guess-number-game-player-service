@@ -1,12 +1,14 @@
 server:
-  port: 8080
   servlet:
     context-path: /
     session:
       timeout: 15m
+      cookie:
+        same-site: Strict
+        secure: false
 spring:
   profiles:
-    active: dev
+    active: prod
   datasource:
     driverClassName: org.postgresql.Driver
     username: postgres

@@ -41,6 +41,9 @@ public class CsrfTokenSecurityConfig {
         .securityMatcher("/csrfToken")
         .securityContext(securityContext -> securityContext
             .requireExplicitSave(true))
+        .headers(headers -> headers
+            .httpStrictTransportSecurity(hsts -> hsts
+                .disable()))
         .cors(cors -> cors
             .configurationSource(csrfTokenCorsConfigurationSource()))
         .csrf(csrf -> csrf

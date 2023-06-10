@@ -44,6 +44,9 @@ public class LogoutSecurityConfig {
         .securityMatcher("/logout")
         .securityContext(securityContext -> securityContext
             .requireExplicitSave(true))
+        .headers(headers -> headers
+            .httpStrictTransportSecurity(hsts -> hsts
+                .disable()))
         .cors(cors -> cors
             .configurationSource(logoutCorsConfigurationSource()))
         .csrf(withDefaults())

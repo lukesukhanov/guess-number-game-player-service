@@ -22,6 +22,9 @@ public class ErrorSecurityConfig {
         .securityMatcher("/error")
         .securityContext(securityContext -> securityContext
             .disable())
+        .headers(headers -> headers
+            .httpStrictTransportSecurity(hsts -> hsts
+                .disable()))
         .cors(cors -> cors
             .disable())
         .csrf(csrf -> csrf

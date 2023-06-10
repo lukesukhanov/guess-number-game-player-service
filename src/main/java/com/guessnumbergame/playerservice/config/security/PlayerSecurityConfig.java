@@ -41,6 +41,9 @@ public class PlayerSecurityConfig {
         .securityMatcher("/players/**")
         .securityContext(securityContext -> securityContext
             .requireExplicitSave(true))
+        .headers(headers -> headers
+            .httpStrictTransportSecurity(hsts -> hsts
+                .disable()))
         .cors(cors -> cors
             .configurationSource(playerCorsConfigurationSource()))
         .csrf(csrf -> csrf

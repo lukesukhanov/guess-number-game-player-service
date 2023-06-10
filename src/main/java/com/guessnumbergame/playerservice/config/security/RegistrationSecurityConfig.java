@@ -38,6 +38,9 @@ public class RegistrationSecurityConfig {
         .securityMatcher("/register")
         .securityContext(securityContext -> securityContext
             .disable())
+        .headers(headers -> headers
+            .httpStrictTransportSecurity(hsts -> hsts
+                .disable()))
         .cors(cors -> cors
             .configurationSource(registrationCorsConfigurationSource()))
         .csrf(csrf -> csrf

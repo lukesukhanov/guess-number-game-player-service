@@ -41,6 +41,9 @@ public class LoginSecurityConfig {
         .securityMatcher("/login")
         .securityContext(securityContext -> securityContext
             .requireExplicitSave(true))
+        .headers(headers -> headers
+            .httpStrictTransportSecurity(hsts -> hsts
+                .disable()))
         .cors(cors -> cors
             .configurationSource(loginCorsConfigurationSource()))
         .csrf(csrf -> csrf
