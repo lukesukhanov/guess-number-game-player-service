@@ -61,7 +61,7 @@ public class PlayerController {
    * <p>
    * Status: 200<br />
    * Body: [{"id": "[id]", "username": "[username]", "bestAttemptsCount":
-   * "[bestAttemptsCount]"}, ... ]
+   * "[bestAttemptsCount]"}, ...]
    * 
    * @return a {@code ResponseEntity} with the {@code 200} status and the body
    *         containing all the players found
@@ -79,7 +79,7 @@ public class PlayerController {
    * <h2>Usage examples</h2>
    * <b>Request</b>
    * <p>
-   * GET /players/{id}<br />
+   * GET /players/[id]<br />
    * <p>
    * <b>Normal response</b>
    * <p>
@@ -153,7 +153,7 @@ public class PlayerController {
    * <p>
    * Status: 200<br />
    * Body: [{"id": "[id]", "username": "[username]", "bestAttemptsCount":
-   * "[bestAttemptsCount]"}, ... ]
+   * "[bestAttemptsCount]"}, ...]
    * <p>
    * <b>Response in case the players not found</b>
    * <p>
@@ -189,7 +189,7 @@ public class PlayerController {
    * <b>Response in case the player with the given username already exists</b>
    * <p>
    * Status: 400<br />
-   * Body: {"error": "The user with this username already exists"}
+   * Body: {"error": "Duplicating username"}
    * 
    * @param player a {@code PlayerSummary} representing the player to be created
    * @return a {@code ResponseEntity} with the {@code 201} status and the body
@@ -214,9 +214,9 @@ public class PlayerController {
    * <h2>Usage examples</h2>
    * <b>Request</b>
    * <p>
-   * PUT /players/{id}<br />
-   * Cookie: JSESSIONID=[JSESSIONID]
-   * X-CSRF-TOKEN: [CSRF token]
+   * PUT /players/[id]<br />
+   * Cookie: JSESSIONID=[JSESSIONID]<br />
+   * X-CSRF-TOKEN: [CSRF token]<br />
    * Body: {"id": "null", "username": "[username]", "bestAttemptsCount":
    * "[bestAttemptsCount]"}
    * <p>
@@ -254,9 +254,9 @@ public class PlayerController {
    * <h2>Usage examples</h2>
    * <b>Request</b>
    * <p>
-   * PATCH /players/{id}<br />
-   * Cookie: JSESSIONID=[JSESSIONID]
-   * X-CSRF-TOKEN: [CSRF token]
+   * PATCH /players/[id]<br />
+   * Cookie: JSESSIONID=[JSESSIONID]<br />
+   * X-CSRF-TOKEN: [CSRF token]<br />
    * Body: {(optional) "username": "[username]", (optional) "bestAttemptsCount":
    * "[bestAttemptsCount]"}
    * <p>
@@ -293,8 +293,8 @@ public class PlayerController {
    * <h2>Usage examples</h2>
    * <b>Request</b>
    * <p>
-   * DELETE /players/{id}<br />
-   * Cookie: JSESSIONID=[JSESSIONID]
+   * DELETE /players/[id]<br />
+   * Cookie: JSESSIONID=[JSESSIONID]<br />
    * X-CSRF-TOKEN: [CSRF token]
    * <p>
    * <b>Normal response</b>

@@ -35,15 +35,15 @@ public class LoginController {
    * <b>Request</b>
    * <p>
    * POST /login<br />
-   * Authorization: Basic [username]:[password]<br />
+   * Authorization: Basic [username]:[password]
    * <p>
-   * The '[username]:[password]' part must be encoded with Base64.
+   * The '[username]:[password]' part must be encoded with the Base64 algorithm.
    * <p>
    * <b>Normal response</b>
    * <p>
    * Status: 200<br />
    * Set-Cookie: JSESSIONID=[JSESSIONID]<br />
-   * Body: { "username": "[username]" }
+   * Body: {"username": "[username]"}
    * <p>
    * <b>Response in case authentication has failed</b>
    * <p>

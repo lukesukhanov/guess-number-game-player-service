@@ -57,19 +57,18 @@ public class RegistrationController {
    * POST /register<br />
    * Authorization: [username]:[password]<br />
    * <p>
-   * The '[username]:[password]' part must be encoded with Base64.
+   * The '[username]:[password]' part must be encoded with the Base64 algorithm.
    * <p>
    * <b>Normal response</b>
    * <p>
    * Status: 201<br />
-   * Location: [/players/[id]]<br />
-   * Body: { "id": "[id]", "username": "[username]", "bestAttemptsCount":
-   * "null"}
+   * Location: /players/[id]<br />
+   * Body: {"id": "[id]", "username": "[username]", "bestAttemptsCount": "null"}
    * <p>
    * <b>Response in case the user with the given username already exists</b>
    * <p>
    * Status: 400<br />
-   * Body: {"error": "The user with this username already exists"}
+   * Body: {"error": "Duplicating username"}
    * 
    * @param registrationForm a {@link RegistrationForm} with the new user's
    *        credentials
