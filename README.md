@@ -2,7 +2,7 @@
 
 # About the application
 
-This application provides the REST API for the 'Guess my number' game.
+This application provides REST API for the 'Guess my number' game.
 <p>
 The game is simple - the player has to guess a number from 1 to 50 with minimal count of attempts.<br />
 Information about players can be saved for the future.<br />
