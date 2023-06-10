@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/dev/v1/v1.0-drop-and-create-schema.sql
+  - include:
+      file: db/changelog/dev/v1/v1.1-drop-and-create-id-sequence.sql
+  - include:
+      file: db/changelog/dev/v1/v1.2-drop-and-create-trigger-functions.sql
+  - include:
+      file: db/changelog/dev/v1/v1.3-drop-and-create-player-table.sql
+  - include:
+      file: db/changelog/dev/v1/v1.4-drop-and-create-users-table.sql
+  - include:
+      file: db/changelog/dev/v1/v1.5-drop-and-create-authorities-table.sql

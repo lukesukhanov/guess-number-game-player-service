@@ -1,0 +1,1 @@
+package com.guessnumbergame.playerservice.config.test;

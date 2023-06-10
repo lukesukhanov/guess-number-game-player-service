@@ -1,18 +1,25 @@
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: Strict
+        secure: false
 spring:
-   datasource:
-      url: jdbc:postgresql://localhost:5432/postgres?currentSchema=guess_my_number_game
-   jpa:
-      show-sql: false
-      properties:
-         hibernate:
-            format_sql: false
-   liquibase:
-      drop-first: false
-      default-schema: guess_my_number_game
-      change-log: classpath:/db/changelog/db.changelog-prod.yml
+  datasource:
+    url: jdbc:postgresql://db:5432/postgres?currentSchema=guess_number_game
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+  liquibase:
+    drop-first: false
+    default-schema: guess_number_game
+    change-log: classpath:/db/changelog/dev/changelog.yml
 app:
-   security:
-      addAdminUser: false
-   profiling:
-      restControllers: false
-      services: false
+  security:
+    addAdminUser: false
+    cors-origins: '*'
+  profiling:
+    restControllers: false
+    services: false

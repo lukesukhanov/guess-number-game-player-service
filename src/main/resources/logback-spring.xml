@@ -16,7 +16,7 @@
 
 	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
 		<file>logs/log-dev.txt</file>
-		<append>false</append>
+		<append>true</append>
 		<layout>
 			<pattern>
 				%d{HH:mm:ss.SSS} [%thread] %level %logger{36} - %msg%n
@@ -28,5 +28,8 @@
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="FILE" />
 	</root>
+	<logger name="org.springframework.security" level="TRACE" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
 
 </configuration>

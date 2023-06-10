@@ -1,41 +1,38 @@
 server:
-   port: 8080
-   servlet:
-      context-path: /api
-      session:
-         timeout: 15m
-         cookie:
-            same-site: Strict
-            secure: true
+  port: 8080
+  servlet:
+    context-path: /
+    session:
+      timeout: 15m
 spring:
-   profiles:
-      active: dev
-   datasource:
-      driverClassName: org.postgresql.Driver
-      username: postgres
-      password: postgres
-      type: com.zaxxer.hikari.HikariDataSource
-      tomcat:
-         initial-size: 5
-         max-wait: 20000
-         max-active: 10
-         min-idle: 8
-         max-idle: 15
-         default-auto-commit: true
-   jpa:
-      database-platform: org.hibernate.dialect.PostgreSQLDialect
-      open-in-view: false
+  profiles:
+    active: dev
+  datasource:
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: postgres
+    type: com.zaxxer.hikari.HikariDataSource
+    tomcat:
+      initial-size: 5
+      max-wait: 20000
+      max-active: 10
+      min-idle: 8
+      max-idle: 15
+      default-auto-commit: true
+  jpa:
+    open-in-view: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    properties:
       hibernate:
-         ddl-auto: none
-      properties:
-         hibernate:
-            jdbc:
-               batch_size: 10
-               fetch_size: 10
-            max_fetch_depth: 3
-            generate_statistics: false
-            temp:
-               use_jdbc_metadata_defaults: true
-   liquibase:
-      enabled: true
-      liquibase-schema: public
+        jdbc:
+          batch_size: 10
+          fetch_size: 10
+        max_fetch_depth: 3
+        generate_statistics: false
+        temp:
+          use_jdbc_metadata_defaults: true
+  liquibase:
+    enabled: true
+    liquibase-schema: public
