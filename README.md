@@ -2,216 +2,170 @@
 
 # About the application
 
-This application provides a simple REST API for the 'Guess my number' game.
+This application provides the REST API for the 'Guess my number' game.
 <p>
-The game boils down to guessing a number from 1 to 50 trying to do it with minimal count of attempts.
-<p>
+The game is simple - the player has to guess a number from 1 to 50 with minimal count of attempts.<br />
 Information about players can be saved for the future.<br />
-Each player has the id, the username and the count of best attempts.<br />
+Each player has the id, the username and the count of his best attempts.<br />
   
-The API user can:
+The API allows user:
 <ul>
-<li>register, login and logout using basic authentication</li>
-<li>receive and save information about himself</li>
-<li>receive information about players with best result</li>
+<li>to register, to login and to logout using basic authentication;</li>
+<li>to receive and to save information about himself;</li>
+<li>to receive information about players with the best result.</li>
 </ul>
-
-Context path: /api
 
 Built with:
 <ul>
-<li>PostgreSQL</li>
-<li>Maven</li>
-<li>Spring Boot</li>
-<li>Spring Security (basic authentication, CORS for http://127.0.0.1:5500, defence from CSRF)</li>
+  <li>Java</li>
+  <li>Spring Boot</li>
+  <li>Spring Security (basic authentication, defence from CSRF)</li>
+  <li>Maven</li>
+  <li>PostgreSQL</li>
 </ul>
 
-See also <a href="https://github.com/lukesukhanov/guess-number-game-frontend">the frontend part of this application</a>
+See also <a href="https://github.com/lukesukhanov/guess-number-game-web">the frontend part of this application</a>
 
-# REST API specification
+# Usage examples
+## Authentication
+### Registration
+<b>Request</b>
+<p>
+POST /register<br />
+Authorization: [username]:[password]<br />
+<p>
+The '[username]:[password]' part must be encoded with the Base64 algorithm.
+<p>  
+<b>Normal response</b>
+<p>
+Status: 201<br />
+Location: /players/[id]<br />
+Body: {"id": "[id]", "username": "[username]", "bestAttemptsCount": "null"}
+<p>
+<b>Response in case the user with the given username already exists</b>
+<p>
+Status: 400<br />
+Body: {"error": "Duplicating username"}
 
-## Register a new user
-
-### Request
-
-POST /register
-
-Authorization: username:password
-
-(The 'username:password' part must be encoded with Base64.)
-
-### Response (normal)
-
-Status: 201
-
-{
-  "id": 1,
-  "username": "boris",
-  "bestAttemptsCount": null
-}
-
-### Response (the user with this username already exists)
-
-Status: 400
-
-{"error": "Duplicate"}
-
-## Login
-
-### Request
-
-POST /login
-
-Authorization: Basic username:password
-
-(The 'username:password' part must be encoded with Base64.)
-
-### Response (normal)
-
+### Login
+<b>Request</b>
+<p>
+POST /login<br />
+Authorization: Basic [username]:[password]
+<p>
+The '[username]:[password]' part must be encoded with the Base64 algorithm.
+<p>  
+<b>Normal response</b>
+<p>
 Status: 200<br />
-Set-Cookie: JSESSIONID=...
-
-{
-  "username": "boris"
-}
-
-### Response (authentication failed)
+Set-Cookie: JSESSIONID=[JSESSIONID]<br />
+Body: {"username": "[username]"}
+<p>
+<b>Response in case authentication has failed</b>
+<p>
 Status: 401
 
-## Get CSRF token (after authentication)
-
-### Request
-
-POST /csrfToken
-
-Cookie: JSESSIONID=...
-
-### Response (normal)
-
-Status: 200
-
-X-CSRF-TOKEN: ...
-
-### Response (authentication failed)
-
-Status: 401
-
-## Logout
-
-### Request
-
-POST /logout
-
-Cookie: JSESSIONID=...<br />
-X-CSRF-TOKEN: ...
-
-### Response
-
+### Receiving CSRF token (after authentication)
+<b>Request</b>
+<p>
+POST /csrfToken<br />
+Cookie: JSESSIONID=[JSESSIONID]
+<p>  
+<b>Normal response</b>
+<p>
 Status: 200<br />
-Set-Cookie: JSESSIONID=; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:10 GMT; Path=/api; SameSite=Strict
-
-## Get all players
-
-### Request
-
-GET /players
-
-### Response
-Status: 200
-
-[
-  {
-    "id": 1,
-   "username": "boris",
-    "bestAttemptsCount": 6
-  },
-  {
-    "id": 2,
-   "username": "ivan",
-    "bestAttemptsCount": 5
-  }
-]
+X-CSRF-TOKEN: [CSRF token]
+<p>
+<b>Response in case authentication has failed</b>
+<p>
+Status: 401
   
-## Get player by id
+### Logout
+<b>Request</b>
+<p>
+POST /logout<br />
+Cookie: JSESSIONID=[JSESSIONID]<br />
+X-CSRF-TOKEN: [CSRF token]
+<p>  
+<b>Normal response</b>
+<p>
+Status: 200<br />
+Set-Cookie: JSESSIONID=<br />
+<p>
+<b>Response in case authentication has failed</b>
+<p>
+Status: 401
+  
+## Players
 
-### Request
-
-GET /players/1
-
-### Response (normal)
-Status: 200
-
-{
-  "id": 1,
-  "username": "boris",
-  "bestAttemptsCount": 6
-}
-
-### Response (player not found)
-Status: 404
-
-{
-  "error": "Can't find player with id = 1"
-}
-
-## Get player by username
-
-### Request
-
-GET /players?username=boris
-
-### Response (normal)
-Status: 200
-
-{
-  "id": 1,
-  "username": "boris",
-  "bestAttemptsCount": 6
-}
-
-### Response (player not found)
-Status: 404
-
-{
-  "error": "Can't find player with username 'boris'"
-}
-
-## Get players with best result
-
-### Request
-
-GET /players/withBestResult
-
-### Response (normal)
-Status: 200
-
-[
-  {
-    "id": 2,
-    "username": "ivan",
-    "bestAttemptsCount": 5
-  }
-]
-
-### Response (empty list)
-Status: 200
-
-[]
-
-## Update the player by id
-
-### Request
-
-PUT /players/1
-
-Cookie: JSESSIONID=...<br />
-X-CSRF-TOKEN: ...
-
-{
-  "id": 1,
-  "username": "boris",
-  "bestAttemptsCount": 4
-}
-
-### Response
+### Get all players
+<b>Request</b>
+<p>
+GET /players<br />
+<p>  
+<b>Normal response</b>
+<p>
+Status: 200<br />
+Body: [{"id": "[id]", "username": "[username]", "bestAttemptsCount": "[bestAttemptsCount]"}, ...]
+  
+### Get player by id
+<b>Request</b>
+<p>
+GET /players/[id]<br />
+<p>  
+<b>Normal response</b>
+<p>
+Status: 200<br />
+Body: {"id": "[id]", "username": "[username]", "bestAttemptsCount": "[bestAttemptsCount]"}
+<p>  
+<b>Response in case the player not found</b>
+<p>
+Status: 404<br />
+Body: {"error": "Can't find player with id = [id]"}
+  
+### Get player by username
+<b>Request</b>
+<p>
+GET /players?username=[username]<br />
+<p>  
+<b>Normal response</b>
+<p>
+Status: 200<br />
+Body: [{"id": "[id]", "username": "[username]", "bestAttemptsCount": "[bestAttemptsCount]"}, ...]
+<p>  
+<b>Response in case the player not found</b>
+<p>
+Status: 404<br />
+Body: {"error": "Can't find player with username '[username]'"}
+  
+### Get players with the best result
+<b>Request</b>
+<p>
+GET /players/withBestResult<br />
+<p>  
+<b>Normal response</b>
+<p>
+Status: 200<br />
+Body: [{"id": "[id]", "username": "[username]", "bestAttemptsCount": "[bestAttemptsCount]"}, ...]
+<p>  
+<b>Response in case the players not found</b>
+<p>
+Status: 200<br />
+Body: []
+  
+### Update the player by id
+<b>Request</b>
+<p>
+PUT /players/[id]<br />
+Cookie: JSESSIONID=[JSESSIONID]<br />
+X-CSRF-TOKEN: [CSRF token]<br />
+Body: {"id": "null", "username": "[username]", "bestAttemptsCount": "[bestAttemptsCount]"}
+<p>  
+<b>Normal response</b>
+<p>
 Status: 204
+<p>  
+<b>Response in case the player not found</b>
+<p>
+Status: 404<br />
+Body: {"error": "Can't find player with id = [id]"}
