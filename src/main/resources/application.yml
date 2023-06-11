@@ -8,7 +8,7 @@ server:
         secure: false
 spring:
   profiles:
-    active: prod
+    active: dev
   datasource:
     driverClassName: org.postgresql.Driver
     username: postgres

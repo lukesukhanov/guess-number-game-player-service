@@ -1,4 +1,4 @@
 /**
- * The repositories to be used by services.
+ * Repositories.
  */
 package com.guessnumbergame.playerservice.repository;

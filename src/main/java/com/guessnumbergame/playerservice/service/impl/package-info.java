@@ -1,4 +1,4 @@
 /**
- * Implementations for the services.
+ * Services implementations.
  */
 package com.guessnumbergame.playerservice.service.impl;

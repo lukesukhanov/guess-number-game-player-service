@@ -1,5 +1,5 @@
 /**
- * Here are the security configurations for the different endpoints.
+ * Security configurations for the different endpoints.<br />
  * There's also a {@link GeneralSecurityConfig} class which contains general security
  * settings.
  * <p>

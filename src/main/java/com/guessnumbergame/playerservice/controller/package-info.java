@@ -1,4 +1,4 @@
 /**
- * The REST controllers.
+ * REST controllers.
  */
 package com.guessnumbergame.playerservice.controller;

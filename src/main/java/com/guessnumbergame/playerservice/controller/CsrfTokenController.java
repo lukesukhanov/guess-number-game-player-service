@@ -24,18 +24,20 @@ public class CsrfTokenController {
    * Generates a new CSRF token for the authenticated user.
    * <p>
    * Serves the {@code POST} requests for the {@code /login} endpoint.
-   * <h2>Usage examples</h2>
-   * <b>Request</b>
+   * <p>
+   * <b>Usage example</b>
+   * <p>
+   * <i>Request</i>
    * <p>
    * POST /csrfToken<br />
    * Cookie: JSESSIONID=[JSESSIONID]
    * <p>
-   * <b>Normal response</b>
+   * <i>Normal response</i>
    * <p>
    * Status: 200<br />
    * X-CSRF-TOKEN: [CSRF token]
    * <p>
-   * <b>Response in case authentication has failed</b>
+   * <i>Response in case authentication has failed</i>
    * <p>
    * Status: 401
    * 

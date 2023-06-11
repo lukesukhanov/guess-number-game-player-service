@@ -51,21 +51,23 @@ public class RegistrationController {
    * Creates a new user and a new player.
    * <p>
    * Serves the {@code POST} requests for the {@code /register} endpoint.
-   * <h2>Usage examples</h2>
-   * <b>Request</b>
+   * <p>
+   * <b>Usage example</b>
+   * <p>
+   * <i>Request</i>
    * <p>
    * POST /register<br />
    * Authorization: [username]:[password]<br />
    * <p>
    * The '[username]:[password]' part must be encoded with the Base64 algorithm.
    * <p>
-   * <b>Normal response</b>
+   * <i>Normal response</i>
    * <p>
    * Status: 201<br />
    * Location: /players/[id]<br />
    * Body: {"id": "[id]", "username": "[username]", "bestAttemptsCount": "null"}
    * <p>
-   * <b>Response in case the user with the given username already exists</b>
+   * <i>Response in case the user with the given username already exists</i>
    * <p>
    * Status: 400<br />
    * Body: {"error": "Duplicating username"}

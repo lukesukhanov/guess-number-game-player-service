@@ -1,4 +1,4 @@
 /**
- * The entities to be used by JPA repositories.
+ * Entities for JPA repositories.
  */
 package com.guessnumbergame.playerservice.entity;

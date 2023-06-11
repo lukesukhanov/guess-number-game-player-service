@@ -52,12 +52,14 @@ public class PlayerController {
    * Finds all existing players.
    * <p>
    * Serves the {@code GET} requests for the {@code /players} endpoint.
-   * <h2>Usage examples</h2>
-   * <b>Request</b>
+   * <p>
+   * <b>Usage example</b>
+   * <p>
+   * <i>Request</i>
    * <p>
    * GET /players<br />
    * <p>
-   * <b>Normal response</b>
+   * <i>Normal response</i>
    * <p>
    * Status: 200<br />
    * Body: [{"id": "[id]", "username": "[username]", "bestAttemptsCount":
@@ -76,18 +78,20 @@ public class PlayerController {
    * Finds the player with the given id.
    * <p>
    * Serves the {@code GET} requests for the {@code /players{id}} endpoints.
-   * <h2>Usage examples</h2>
-   * <b>Request</b>
+   * <p>
+   * <b>Usage example</b>
+   * <p>
+   * <i>Request</i>
    * <p>
    * GET /players/[id]<br />
    * <p>
-   * <b>Normal response</b>
+   * <i>Normal response</i>
    * <p>
    * Status: 200<br />
    * Body: {"id": "[id]", "username": "[username]", "bestAttemptsCount":
    * "[bestAttemptsCount]"}
    * <p>
-   * <b>Response in case the player not found</b>
+   * <i>Response in case the player not found</i>
    * <p>
    * Status: 404<br />
    * Body: {"error": "Can't find player with id = [id]"}
@@ -110,18 +114,20 @@ public class PlayerController {
    * <p>
    * Serves the {@code GET} requests for the
    * {@code /players?username=[username]} endpoints.
-   * <h2>Usage examples</h2>
-   * <b>Request</b>
+   * <p>
+   * <b>Usage example</b>
+   * <p>
+   * <i>Request</i>
    * <p>
    * GET /players?username=[username]<br />
    * <p>
-   * <b>Normal response</b>
+   * <i>Normal response</i>
    * <p>
    * Status: 200<br />
    * Body: {"id": "[id]", "username": "[username]", "bestAttemptsCount":
    * "[bestAttemptsCount]"}
    * <p>
-   * <b>Response in case the player not found</b>
+   * <i>Response in case the player not found</i>
    * <p>
    * Status: 404<br />
    * Body: {"error": "Can't find player with username '[username]'"}
@@ -144,18 +150,20 @@ public class PlayerController {
    * <p>
    * Serves the {@code GET} requests for the {@code /players/withBestResult}
    * endpoint.
-   * <h2>Usage examples</h2>
-   * <b>Request</b>
+   * <p>
+   * <b>Usage example</b>
+   * <p>
+   * <i>Request</i>
    * <p>
    * GET /players/withBestResult<br />
    * <p>
-   * <b>Normal response</b>
+   * <i>Normal response</i>
    * <p>
    * Status: 200<br />
    * Body: [{"id": "[id]", "username": "[username]", "bestAttemptsCount":
    * "[bestAttemptsCount]"}, ...]
    * <p>
-   * <b>Response in case the players not found</b>
+   * <i>Response in case the players not found</i>
    * <p>
    * Status: 200<br />
    * Body: []
@@ -173,20 +181,22 @@ public class PlayerController {
    * The player's id from the request body is ignored.
    * <p>
    * Serves the {@code POST} requests for the {@code /players} endpoint.
-   * <h2>Usage examples</h2>
-   * <b>Request</b>
+   * <p>
+   * <b>Usage example</b>
+   * <p>
+   * <i>Request</i>
    * <p>
    * POST /players<br />
    * Body: {"id": "null", "username": "[username]", "bestAttemptsCount":
    * "[bestAttemptsCount]"}
    * <p>
-   * <b>Normal response</b>
+   * <i>Normal response</i>
    * <p>
    * Status: 201<br />
    * Body: {"id": "[id]", "username": "[username]", "bestAttemptsCount":
    * "[bestAttemptsCount]"}
    * <p>
-   * <b>Response in case the player with the given username already exists</b>
+   * <i>Response in case the player with the given username already exists</i>
    * <p>
    * Status: 400<br />
    * Body: {"error": "Duplicating username"}
@@ -211,8 +221,10 @@ public class PlayerController {
    * The player's id from the request body is ignored.
    * <p>
    * Serves the {@code PUT} requests for the {@code /players/{id}} endpoints.
-   * <h2>Usage examples</h2>
-   * <b>Request</b>
+   * <p>
+   * <b>Usage example</b>
+   * <p>
+   * <i>Request</i>
    * <p>
    * PUT /players/[id]<br />
    * Cookie: JSESSIONID=[JSESSIONID]<br />
@@ -220,11 +232,11 @@ public class PlayerController {
    * Body: {"id": "null", "username": "[username]", "bestAttemptsCount":
    * "[bestAttemptsCount]"}
    * <p>
-   * <b>Normal response</b>
+   * <i>Normal response</i>
    * <p>
    * Status: 204
    * <p>
-   * <b>Response in case the player not found</b>
+   * <i>Response in case the player not found</i>
    * <p>
    * Status: 404<br />
    * Body: {"error": "Can't find player with id = [id]"}
@@ -251,8 +263,10 @@ public class PlayerController {
    * The player's id from the request body is ignored.<br />
    * <p>
    * Serves the {@code PATCH} requests for the {@code /players/{id}} endpoints.
-   * <h2>Usage examples</h2>
-   * <b>Request</b>
+   * <p>
+   * <b>Usage example</b>
+   * <p>
+   * <i>Request</i>
    * <p>
    * PATCH /players/[id]<br />
    * Cookie: JSESSIONID=[JSESSIONID]<br />
@@ -260,11 +274,11 @@ public class PlayerController {
    * Body: {(optional) "username": "[username]", (optional) "bestAttemptsCount":
    * "[bestAttemptsCount]"}
    * <p>
-   * <b>Normal response</b>
+   * <i>Normal response</i>
    * <p>
    * Status: 204
    * <p>
-   * <b>Response in case the player not found</b>
+   * <i>Response in case the player not found</i>
    * <p>
    * Status: 404<br />
    * Body: {"error": "Can't find player with id = [id]"}
@@ -290,14 +304,16 @@ public class PlayerController {
    * Deletes the player with the given id, responds with no content.
    * <p>
    * Serves the {@code DELETE} requests for the {@code /players/{id}} endpoints.
-   * <h2>Usage examples</h2>
-   * <b>Request</b>
+   * <p>
+   * <b>Usage example</b>
+   * <p>
+   * <i>Request</i>
    * <p>
    * DELETE /players/[id]<br />
    * Cookie: JSESSIONID=[JSESSIONID]<br />
    * X-CSRF-TOKEN: [CSRF token]
    * <p>
-   * <b>Normal response</b>
+   * <i>Normal response</i>
    * <p>
    * Status: 204
    * 

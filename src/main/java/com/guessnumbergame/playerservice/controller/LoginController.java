@@ -31,21 +31,23 @@ public class LoginController {
    * Authenticates the user.
    * <p>
    * Serves the {@code POST} requests for the {@code /login} endpoint.
-   * <h2>Usage examples</h2>
-   * <b>Request</b>
+   * <p>
+   * <b>Usage example</b>
+   * <p>
+   * <i>Request</i>
    * <p>
    * POST /login<br />
    * Authorization: Basic [username]:[password]
    * <p>
    * The '[username]:[password]' part must be encoded with the Base64 algorithm.
    * <p>
-   * <b>Normal response</b>
+   * <i>Normal response</i>
    * <p>
    * Status: 200<br />
    * Set-Cookie: JSESSIONID=[JSESSIONID]<br />
    * Body: {"username": "[username]"}
    * <p>
-   * <b>Response in case authentication has failed</b>
+   * <i>Response in case authentication has failed</i>
    * <p>
    * Status: 401
    * 
