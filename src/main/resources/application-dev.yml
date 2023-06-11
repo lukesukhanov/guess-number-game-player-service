@@ -2,16 +2,17 @@ server:
   port: 8080
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=guess_number_game_dev
+    url: jdbc:postgresql://localhost:5432/postgres
   jpa:
     show-sql: true
     properties:
       hibernate:
+        default_schema: guess_number_game_dev
         format_sql: true
   liquibase:
+    change-log: classpath:/db/changelog/dev/changelog.yml
     drop-first: true
     default-schema: guess_number_game_dev
-    change-log: classpath:/db/changelog/dev/changelog.yml
 app:
   security:
     addAdminUser: true
