@@ -204,7 +204,8 @@ public class PlayerController {
 
   /**
    * Updates the player by id. Requires authentication and the CSRF token.<br />
-   * The player's id from the request body is ignored.
+   * The player's id and the username from the request body are ignored.<br />
+   * The username can't be changed.
    * <p>
    * Serves the {@code PUT} requests for the {@code /players/{id}} endpoints.
    * <p>
@@ -223,18 +224,11 @@ public class PlayerController {
    * <p>
    * Status: 404<br />
    * Body: {error: "Can't find player with id = 1}
-   * <p>
-   * <i>The player with this username already exists</i>
-   * <p>
-   * Status: 400<br />
-   * Body: {error: "Duplicating username"}
    * 
    * @param id a {@code Long} representing the player's id
    * @param player a {@code PlayerSummary} representing the player to be updated
    * @return a {@code ResponseEntity} with the status {@code 204}
    * @throws PlayerNotFoundException if the player with this id doesn't exist
-   * @throws DuplicateKeyException if the player with this username already
-   *         exists
    * @throws PlayerNotUpdatedException if the player failed to be updated for
    *         technical reasons
    * @see PlayerResponseEntityExceptionHandler
@@ -247,7 +241,8 @@ public class PlayerController {
 
   /**
    * Patches the player by id. Requires authentication and the CSRF token.<br />
-   * The player's id from the request body is ignored.<br />
+   * The player's id and the username from the request body are ignored.<br />
+   * The username can't be changed.
    * <p>
    * Serves the {@code PATCH} requests for the {@code /players/{id}} endpoints.
    * <p>
@@ -255,8 +250,8 @@ public class PlayerController {
    * <p>
    * <i>Request</i>
    * <p>
-   * PATCH /players/[id]<br />
-   * Body: {id: 1, username: "vasya", bestAttemptsCount: 10}
+   * PATCH /players/1<br />
+   * Body: {bestAttemptsCount: 10}
    * <p>
    * <i>The player was patched</i>
    * <p>
@@ -266,18 +261,11 @@ public class PlayerController {
    * <p>
    * Status: 404<br />
    * Body: {error: "Can't find player with id = 1"}
-   * <p>
-   * <i>The player with this username already exists</i>
-   * <p>
-   * Status: 400<br />
-   * Body: {error: "Duplicating username"}
    * 
    * @param id a {@code Long} representing the player's id
    * @param player a {@code PlayerSummary} representing the player to be patched
    * @return a {@code ResponseEntity} with the status {@code 204}
    * @throws PlayerNotFoundException if the player with this id doesn't exist
-   * @throws DuplicateKeyException if the player with this username already
-   *         exists
    * @throws PlayerNotUpdatedException if the player failed to be patched for
    *         technical reasons
    * @see PlayerResponseEntityExceptionHandler

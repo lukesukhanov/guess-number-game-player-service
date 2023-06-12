@@ -2,11 +2,14 @@ package com.guessnumbergame.playerservice.service.impl;
 
 import java.util.List;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +44,8 @@ public class DefaultPlayerService implements PlayerService {
 
   private final PlayerMapper playerMapper;
 
+  private final ApplicationContext applicationContext;
+
   @Override
   public List<PlayerSummary> getAll() {
     return this.playerRepository.findAllPlayerSummaries();
@@ -70,16 +75,29 @@ public class DefaultPlayerService implements PlayerService {
     return this.playerMapper.playerEntityToPlayerSummary(savedPlayerEntity);
   }
 
-  @PreAuthorize("hasRole('ADMIN') || #player.username == authentication.name")
   @Transactional
-  @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 5,
-      backoff = @Backoff(delay = 100L), recover = "recoverUpdate")
+  @Retryable(
+      retryFor = ObjectOptimisticLockingFailureException.class,
+      noRetryFor = {
+          AuthenticationCredentialsNotFoundException.class,
+          AccessDeniedException.class },
+      notRecoverable = {
+          AuthenticationCredentialsNotFoundException.class,
+          AccessDeniedException.class },
+      maxAttempts = 5,
+      backoff = @Backoff(delay = 100L),
+      recover = "recoverUpdate")
   @Override
   public void update(Long id, PlayerSummary player) {
     PlayerEntity playerEntity = this.playerRepository.findById(id)
         .orElseThrow(() -> new PlayerNotFoundException(id));
     log.trace("Loaded player from {}: {}", PlayerRepository.class.getSimpleName(), playerEntity);
-    playerEntity.setUsername(player.getUsername());
+    DefaultPlayerService thisPlayerService = this.applicationContext.getBean(this.getClass());
+    thisPlayerService.doUpdate(player, playerEntity);
+  }
+
+  @PreAuthorize("hasRole('ADMIN') || #playerEntity.username == authentication.name")
+  void doUpdate(PlayerSummary player, PlayerEntity playerEntity) {
     playerEntity.setBestAttemptsCount(player.getBestAttemptsCount());
     PlayerEntity savedplayerEntity = this.playerRepository.save(playerEntity);
     log.trace("Saved player into {}: {}", PlayerRepository.class.getSimpleName(),
@@ -87,31 +105,43 @@ public class DefaultPlayerService implements PlayerService {
   }
 
   @Recover
-  private void recoverUpdate(ObjectOptimisticLockingFailureException e, Long id,
-      PlayerSummary player) {
+  private void recoverUpdate(RuntimeException e, Long id, PlayerSummary player) {
     throw new PlayerNotUpdatedException(id);
   }
 
-  @PreAuthorize("hasRole('ADMIN') || #player.username == authentication.name")
   @Transactional
-  @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 5,
-      backoff = @Backoff(delay = 100L), recover = "recoverPatch")
+  @Retryable(
+      retryFor = ObjectOptimisticLockingFailureException.class,
+      noRetryFor = {
+          AuthenticationCredentialsNotFoundException.class,
+          AccessDeniedException.class },
+      notRecoverable = {
+          AuthenticationCredentialsNotFoundException.class,
+          AccessDeniedException.class },
+      maxAttempts = 5,
+      backoff = @Backoff(delay = 100L),
+      recover = "recoverPatch")
   @Override
   public void patch(Long id, PlayerSummary player) {
     PlayerEntity playerEntity = this.playerRepository.findById(id)
         .orElseThrow(() -> new PlayerNotFoundException(id));
-    if (player.getUsername() != null) {
-      playerEntity.setUsername(player.getUsername());
-    }
+    log.trace("Loaded player from {}: {}", PlayerRepository.class.getSimpleName(), playerEntity);
+    DefaultPlayerService thisPlayerService = this.applicationContext.getBean(this.getClass());
+    thisPlayerService.doPatch(player, playerEntity);
+  }
+
+  @PreAuthorize("hasRole('ADMIN') || #playerEntity.username == authentication.name")
+  void doPatch(PlayerSummary player, PlayerEntity playerEntity) {
     if (player.getBestAttemptsCount() != null) {
       playerEntity.setBestAttemptsCount(player.getBestAttemptsCount());
     }
-    this.playerRepository.save(playerEntity);
+    PlayerEntity savedplayerEntity = this.playerRepository.save(playerEntity);
+    log.trace("Saved player into {}: {}", PlayerRepository.class.getSimpleName(),
+        savedplayerEntity);
   }
 
   @Recover
-  private void recoverPatch(ObjectOptimisticLockingFailureException e, Long id,
-      PlayerSummary player) {
+  private void recoverPatch(RuntimeException e, Long id, PlayerSummary player) {
     throw new PlayerNotUpdatedException(id);
   }
 

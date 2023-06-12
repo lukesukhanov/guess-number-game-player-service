@@ -168,7 +168,10 @@ paths:
       tags:
         - Players
       summary: Update the player by id
-      description: The player's id from the request body is ignored. Requires authentication and the CSRF token.
+      description: |-
+        The player's id and the username from the request body are ignored.<br />
+        The username can't be changed.<br />
+        Requires authentication and the CSRF token.
       parameters:
         - in: path
           name: id
@@ -204,7 +207,10 @@ paths:
       tags:
         - Players
       summary: Patch the player by id
-      description: The player's id from the request body is ignored. Requires authentication and the CSRF token.
+      description: |-
+        The player's id and the username from the request body are ignored.<br />
+        The username can't be changed.<br />
+        Requires authentication and the CSRF token.
       parameters:
         - in: path
           name: id
@@ -218,7 +224,7 @@ paths:
             type: string
           description: The CSRF Token
       requestBody:
-        $ref: "#/components/requestBodies/PlayerSummary"
+        example: {bestAttemptsCount: 5}
       security: 
         - basic_auth: []
       responses:
@@ -240,7 +246,8 @@ paths:
       tags:
         - Players
       summary: Delete the player by id
-      description: Requires authentication and the CSRF token.
+      description: |-
+        Requires authentication with the role "ADMIN" and the CSRF token.<br />
       security: 
         - basic_auth: []
       parameters:

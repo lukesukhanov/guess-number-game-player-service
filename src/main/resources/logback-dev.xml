@@ -31,6 +31,7 @@
 	</root>
 	<logger name="com.guessnumbergame.playerservice" level="DEBUG" additivity="false">
 		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
 	</logger>
 
 </configuration>

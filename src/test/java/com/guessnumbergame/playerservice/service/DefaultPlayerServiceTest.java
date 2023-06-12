@@ -33,7 +33,7 @@ import com.guessnumbergame.playerservice.repository.PlayerRepository;
 @DisplayName("PlayerService")
 @Tag("service")
 @Tag("player")
-class PlayerServiceTest {
+class DefaultPlayerServiceTest {
 
   @MockBean
   private PlayerRepository playerRepository;
@@ -168,7 +168,7 @@ class PlayerServiceTest {
     Long id = 1L;
     PlayerSummary player = new PlayerSummary(null, "username", 1);
     PlayerEntity playerEntity = new PlayerEntity();
-    playerEntity.setId(id);
+    playerEntity.setUsername("username");
     when(this.playerRepository.findById(id))
         .thenReturn(Optional.of(playerEntity));
     assertDoesNotThrow(() -> this.playerService.update(id, player));
@@ -181,7 +181,6 @@ class PlayerServiceTest {
     Long id = 1L;
     PlayerSummary player = new PlayerSummary(null, "username", 1);
     PlayerEntity playerEntity = new PlayerEntity();
-    playerEntity.setId(id);
     when(this.playerRepository.findById(id))
         .thenReturn(Optional.of(playerEntity));
     assertDoesNotThrow(() -> this.playerService.update(id, player));
@@ -192,16 +191,24 @@ class PlayerServiceTest {
   final void update_unauthenticated() throws Exception {
     Long id = 1L;
     PlayerSummary player = new PlayerSummary(null, "username", 1);
+    PlayerEntity playerEntity = new PlayerEntity();
+    playerEntity.setUsername("username");
+    when(this.playerRepository.findById(id))
+        .thenReturn(Optional.of(playerEntity));
     assertThrows(AuthenticationCredentialsNotFoundException.class,
         () -> this.playerService.update(id, player));
   }
 
   @Test
   @DisplayName("update(Long, PlayerSummary) - authenticated with not matching username")
-  @WithMockUser(roles = "USER", username = "notMatchingUsername")
+  @WithMockUser(username = "notMatchingUsername", roles = "USER")
   final void update_authenticatedWithNotMatchingUsername() throws Exception {
     Long id = 1L;
     PlayerSummary player = new PlayerSummary(null, "username", 1);
+    PlayerEntity playerEntity = new PlayerEntity();
+    playerEntity.setUsername("username");
+    when(this.playerRepository.findById(id))
+        .thenReturn(Optional.of(playerEntity));
     assertThrows(AccessDeniedException.class,
         () -> this.playerService.update(id, player));
   }
@@ -213,7 +220,7 @@ class PlayerServiceTest {
     Long id = 1L;
     PlayerSummary player = new PlayerSummary(null, "username", 1);
     PlayerEntity playerEntity = new PlayerEntity();
-    playerEntity.setId(id);
+    playerEntity.setUsername("username");
     when(this.playerRepository.findById(id))
         .thenReturn(Optional.of(playerEntity));
     assertDoesNotThrow(() -> this.playerService.patch(id, player));
@@ -226,7 +233,6 @@ class PlayerServiceTest {
     Long id = 1L;
     PlayerSummary player = new PlayerSummary(null, "username", 1);
     PlayerEntity playerEntity = new PlayerEntity();
-    playerEntity.setId(id);
     when(this.playerRepository.findById(id))
         .thenReturn(Optional.of(playerEntity));
     assertDoesNotThrow(() -> this.playerService.patch(id, player));
@@ -237,16 +243,24 @@ class PlayerServiceTest {
   final void patch_unauthenticated() throws Exception {
     Long id = 1L;
     PlayerSummary player = new PlayerSummary(null, "username", 1);
+    PlayerEntity playerEntity = new PlayerEntity();
+    playerEntity.setUsername("username");
+    when(this.playerRepository.findById(id))
+        .thenReturn(Optional.of(playerEntity));
     assertThrows(AuthenticationCredentialsNotFoundException.class,
         () -> this.playerService.patch(id, player));
   }
 
   @Test
   @DisplayName("patch(Long, PlayerSummary) - authenticated with not matching username")
-  @WithMockUser(roles = "USER", username = "notMatchingUsername")
+  @WithMockUser(username = "notMatchingUsername", roles = "USER")
   final void patch_authenticatedWithNotMatchingUsername() throws Exception {
     Long id = 1L;
     PlayerSummary player = new PlayerSummary(null, "username", 1);
+    PlayerEntity playerEntity = new PlayerEntity();
+    playerEntity.setUsername("username");
+    when(this.playerRepository.findById(id))
+        .thenReturn(Optional.of(playerEntity));
     assertThrows(AccessDeniedException.class,
         () -> this.playerService.patch(id, player));
   }
