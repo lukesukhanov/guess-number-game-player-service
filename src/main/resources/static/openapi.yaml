@@ -305,7 +305,7 @@ components:
         username:
           type: string
           example: vasya
-        bestAttamptsCount:
+        bestAttemptsCount:
           type: integer
           format: int32
           example: 10
@@ -326,7 +326,7 @@ components:
   requestBodies:
     PlayerSummary:
       content:
-        pplication/json:
+        application/json:
           schema:
             $ref: "#/components/schemas/PlayerSummary"
   securitySchemes:
