@@ -61,7 +61,7 @@ public class RegistrationSecurityConfig {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(Arrays.asList(this.corsOrigins));
     configuration.setAllowedMethods(Arrays.asList("POST"));
-    configuration.setAllowedHeaders(Arrays.asList("Authorization"));
+    configuration.setAllowedHeaders(Arrays.asList("Registration"));
     configuration.setMaxAge(3600L);
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/register", configuration);

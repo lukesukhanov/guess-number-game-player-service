@@ -1,0 +1,335 @@
+openapi: 3.0.3
+info:
+  title: Player service
+  description: |-
+    This application provides REST API for the 'Guess my number' game.
+    <p>
+    The game is simple - the player has to guess a number from 1 to 50 with minimal count of attempts.<br />
+    Information about players can be saved for the future.<br />
+    Each player has the id, the username and the count of his best attempts.
+    <p>
+    The API allows user:
+    <ul>
+    <li>to register, to login and to logout using basic authentication;</li>
+    <li>to receive and to save information about himself;</li>
+    <li>to receive information about players with the best result.</li>
+    </ul>
+
+  contact:
+    name: Luke Sukhanov
+    email: lukesukhanov@gmail.com
+    url: https://github.com/lukesukhanov
+  version: "1.0"
+servers: 
+  - url: http://127.0.0.1:8082
+paths:
+  /login:
+    post:
+      tags:
+        - Authentication
+      summary: Try to authenticate
+      description: Returns the username in the response body.
+      security: 
+        - basic_auth: []
+      responses:
+        200:
+          description: Successful authentication
+          content:
+            application/json:
+              example: {username: "vasya"}
+  /csrfToken:
+    post:
+      tags:
+        - Authentication
+      summary: Receive a new CSRF token
+      description: Creates a new CSRF token and puts it in the special header. Requires authentication.
+      security: 
+        - basic_auth: []
+      responses:
+        204:
+          description: A new CSRF token was created
+          headers:
+            X-CSRF-Token:
+              schema:
+                type: string
+              example: 123
+              description: A new CSRF token
+  /logout:
+    post:
+      tags:
+        - Authentication
+      summary: Try to log out
+      description: Requires authentication and a CSRF token.
+      parameters: 
+        - in: header
+          name: X-CSRF-Token
+          schema:
+            type: string
+          description: The CSRF Token
+      security: 
+        - basic_auth: []
+      responses:
+        204:
+          description: Successful logout
+  /register:
+    post:
+      tags:
+        - Registration
+      summary: Create a new player
+      description: Creates a new user and a new player. Returns the created player.
+      parameters: 
+        - in: header
+          name: Registration
+          schema:
+            type: string
+          description: "The 'username:password' expression encoded with the Base64 algorithm"
+      responses:
+        201:
+          description: Successful registration
+          headers:
+            Location:
+              schema:
+                type: string
+              example: /players/1
+              description: A new player's URI
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewPlayerSummary"
+        400:
+          description: The user with the given username already exists
+          content:
+            application/json:
+              schema:
+                example: {error: "Duplicating username"}
+  /players:
+    get:
+      tags:
+        - Players
+      summary: Get all existing players
+      responses:
+        200:
+          description: Normal response
+          content:
+            application/json:
+              schema:
+                example: [{id: 1, username: "vasya", bestAttemptsCount: 10}, ... ]
+    post:
+      tags:
+        - Players
+      summary: Create a new player
+      description: The player's id from the request body is ignored.
+      requestBody:
+        $ref: "#/components/requestBodies/PlayerSummary"
+      responses:
+        201:
+          description: A new player was created
+          headers:
+            Location:
+              schema:
+                type: string
+              example: /players/1
+              description: A new player's URI
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerSummary"
+        400:
+          description: The player with this username already exists
+          content:
+            application/json:
+              schema:
+                example: {error: "Duplicating username"}
+  /players/{id}:
+    get:
+      tags:
+        - Players
+      summary: Find a player by id
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+      responses:
+        200:
+          description: The player was found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerSummary"
+        404:
+          description: The player wasn't found
+          content:
+            application/json:
+              example: {error: "Can't find player with id = 1"}
+    put:
+      tags:
+        - Players
+      summary: Update the player by id
+      description: The player's id from the request body is ignored. Requires authentication and the CSRF token.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - in: header
+          name: X-CSRF-Token
+          schema:
+            type: string
+          description: The CSRF Token
+      requestBody:
+        $ref: "#/components/requestBodies/PlayerSummary"
+      security: 
+        - basic_auth: []
+      responses:
+        204:
+          description: The player was updated
+        404:
+          description: The player wasn't found
+          content:
+            application/json:
+              schema:
+                example: {error: "Can't find player with id = 1"}
+        400:
+          description: The player with this username already exists
+          content:
+            application/json:
+              schema:
+                example: {error: "Duplicating username"}
+    patch:
+      tags:
+        - Players
+      summary: Patch the player by id
+      description: The player's id from the request body is ignored. Requires authentication and the CSRF token.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - in: header
+          name: X-CSRF-Token
+          schema:
+            type: string
+          description: The CSRF Token
+      requestBody:
+        $ref: "#/components/requestBodies/PlayerSummary"
+      security: 
+        - basic_auth: []
+      responses:
+        204:
+          description: The player was patched
+        404:
+          description: The player wasn't found
+          content:
+            application/json:
+              schema:
+                example: {error: "Can't find player with id = 1"}
+        400:
+          description: The player with this username already exists
+          content:
+            application/json:
+              schema:
+                example: {error: "Duplicating username"}
+    delete:
+      tags:
+        - Players
+      summary: Delete the player by id
+      description: Requires authentication and the CSRF token.
+      security: 
+        - basic_auth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - in: header
+          name: X-CSRF-Token
+          schema:
+            type: string
+          description: The CSRF Token
+      responses:
+        204:
+          description: The player was deleted
+  /players/byUsername:
+    get:
+      tags:
+        - Players
+      summary: Find a player by username
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+          required: true
+      responses:
+        200:
+          description: The player was found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlayerSummary"
+        404:
+          description: The player wasn't found
+          content:
+            application/json:
+              example: {error: "Can't find player with username 'vasya'"}
+  /players/withBestResult:
+    get:
+      tags:
+        - Players
+      summary: Find all players with the best result
+      responses:
+        200:
+          description: Normal response
+          content:
+            application/json:
+              schema:
+                example: [{id: 1, username: "vasya", bestAttemptsCount: 10}, ... ]
+components:
+  schemas:
+    PlayerSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          example: vasya
+        bestAttamptsCount:
+          type: integer
+          format: int32
+          example: 10
+    NewPlayerSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          example: vasya
+        bestAttamptsCount:
+          type: integer
+          format: int32
+          example: null
+  requestBodies:
+    PlayerSummary:
+      content:
+        pplication/json:
+          schema:
+            $ref: "#/components/schemas/PlayerSummary"
+  securitySchemes:
+    basic_auth:
+      type: http
+      scheme: basic

@@ -124,7 +124,7 @@ class PlayerControllerTest {
     PlayerSummary player = new PlayerSummary(1L, username, 1);
     when(this.playerService.getByUsername(username))
         .thenReturn(player);
-    this.mockMvc.perform(get("/players?username=" + username)
+    this.mockMvc.perform(get("/players/byUsername?username=" + username)
         .accept(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isOk(),
@@ -139,7 +139,7 @@ class PlayerControllerTest {
     PlayerNotFoundException e = new PlayerNotFoundException(username);
     when(this.playerService.getByUsername(username))
         .thenThrow(e);
-    this.mockMvc.perform(get("/players?username=" + username)
+    this.mockMvc.perform(get("/players/byUsername?username=" + username)
         .accept(MediaType.APPLICATION_JSON))
         .andExpectAll(
             status().isNotFound(),

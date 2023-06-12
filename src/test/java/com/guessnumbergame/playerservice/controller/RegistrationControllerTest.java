@@ -67,7 +67,7 @@ class RegistrationControllerTest {
         .thenReturn(savedPlayer);
     this.mockMvc.perform(post("/register")
         .accept(MediaType.APPLICATION_JSON)
-        .header(HttpHeaders.AUTHORIZATION, encodedCredentials))
+        .header("Registration", encodedCredentials))
         .andExpectAll(
             status().isCreated(),
             header().string(HttpHeaders.LOCATION, "/players/1"),
@@ -88,7 +88,7 @@ class RegistrationControllerTest {
         .when(this.userDetailsManager).createUser(user);
     this.mockMvc.perform(post("/register")
         .accept(MediaType.APPLICATION_JSON)
-        .header(HttpHeaders.AUTHORIZATION, encodedCredentials))
+        .header("Registration", encodedCredentials))
         .andExpectAll(
             status().isBadRequest(),
             content().contentType(MediaType.APPLICATION_JSON),

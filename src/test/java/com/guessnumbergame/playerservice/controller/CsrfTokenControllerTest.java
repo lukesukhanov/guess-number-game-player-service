@@ -31,7 +31,7 @@ class CsrfTokenControllerTest {
   final void sendCsrfToken_authenticated() throws Exception {
     this.mockMvc.perform(post("/csrfToken"))
         .andExpectAll(
-            status().isOk(),
+            status().isNoContent(),
             header().exists("X-CSRF-TOKEN"));
   }
 

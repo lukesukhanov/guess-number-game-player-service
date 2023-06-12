@@ -27,10 +27,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 /**
- * The REST controller which provides the endpoints to access information about
- * players of the game.<br />
- * Works with players using {@link PlayerSummary} objects and the
- * {@link PlayerService} service.
+ * Provides the endpoints to access players of the game.<br />
  * <p>
  * The endpoints {@code /players/**} are used.
  * <p>
@@ -62,10 +59,9 @@ public class PlayerController {
    * <i>Normal response</i>
    * <p>
    * Status: 200<br />
-   * Body: [{"id": "[id]", "username": "[username]", "bestAttemptsCount":
-   * "[bestAttemptsCount]"}, ...]
+   * Body: [{id: 1, username: "vasya", bestAttemptsCount: 10}, ... ]
    * 
-   * @return a {@code ResponseEntity} with the {@code 200} status and the body
+   * @return a {@code ResponseEntity} with the status {@code 200} and the body
    *         containing all the players found
    */
   @GetMapping
@@ -75,7 +71,7 @@ public class PlayerController {
   }
 
   /**
-   * Finds the player with the given id.
+   * Finds a player by id.
    * <p>
    * Serves the {@code GET} requests for the {@code /players{id}} endpoints.
    * <p>
@@ -83,24 +79,22 @@ public class PlayerController {
    * <p>
    * <i>Request</i>
    * <p>
-   * GET /players/[id]<br />
+   * GET /players/1<br />
    * <p>
-   * <i>Normal response</i>
+   * <i>The player was found</i>
    * <p>
    * Status: 200<br />
-   * Body: {"id": "[id]", "username": "[username]", "bestAttemptsCount":
-   * "[bestAttemptsCount]"}
+   * Body: {id: 1, username: "vasya", bestAttemptsCount: 10}
    * <p>
-   * <i>Response in case the player not found</i>
+   * <i>The player wasn't found</i>
    * <p>
    * Status: 404<br />
-   * Body: {"error": "Can't find player with id = [id]"}
+   * Body: {error: "Can't find player with id = 1"}
    * 
    * @param id a {@code Long} representing the player's id
-   * @return a {@code ResponseEntity} with the {@code 200} status and the body
-   *         containing information about the player with the given id
-   * @throws PlayerNotFoundException if the player with the given id doesn't
-   *         exist
+   * @return a {@code ResponseEntity} with the status {@code 200} and the body
+   *         containing the player with the given id
+   * @throws PlayerNotFoundException if the player with this id doesn't exist
    * @see PlayerResponseEntityExceptionHandler
    */
   @GetMapping("/{id}")
@@ -110,43 +104,42 @@ public class PlayerController {
   }
 
   /**
-   * Responds with information about the player with the given username.
+   * Finds a player by username.
    * <p>
    * Serves the {@code GET} requests for the
-   * {@code /players?username=[username]} endpoints.
+   * {@code /players/byUsername?username={username}} endpoints.
    * <p>
    * <b>Usage example</b>
    * <p>
    * <i>Request</i>
    * <p>
-   * GET /players?username=[username]<br />
+   * GET /players?username=vasya<br />
    * <p>
-   * <i>Normal response</i>
+   * <i>The player was found</i>
    * <p>
    * Status: 200<br />
-   * Body: {"id": "[id]", "username": "[username]", "bestAttemptsCount":
-   * "[bestAttemptsCount]"}
+   * Body: {id: 1, username: "vasya", bestAttemptsCount: 10}
    * <p>
-   * <i>Response in case the player not found</i>
+   * <i>The player wasn't found</i>
    * <p>
    * Status: 404<br />
-   * Body: {"error": "Can't find player with username '[username]'"}
+   * Body: {error: "Can't find player with username 'vasya'"}
    * 
    * @param username a {@code String} representing the player's username
-   * @return a {@code ResponseEntity} with the {@code 200} status and the body
-   *         containing information about the player with the given username
-   * @throws PlayerNotFoundException if the player with the given username
-   *         doesn't exist
+   * @return a {@code ResponseEntity} with the status {@code 200} and the body
+   *         containing the player with the given username
+   * @throws PlayerNotFoundException if the player with this username doesn't
+   *         exist
    * @see PlayerResponseEntityExceptionHandler
    */
-  @GetMapping(params = "username")
-  public ResponseEntity<PlayerSummary> getByUsername(@RequestParam String username) {
+  @GetMapping(path = "/byUsername")
+  public ResponseEntity<PlayerSummary> getByUsername(@RequestParam("username") String username) {
     PlayerSummary player = this.playerService.getByUsername(username);
     return ResponseEntity.ok(player);
   }
 
   /**
-   * Responds with information about the players with the best result.
+   * Finds all players with the best result.
    * <p>
    * Serves the {@code GET} requests for the {@code /players/withBestResult}
    * endpoint.
@@ -160,16 +153,10 @@ public class PlayerController {
    * <i>Normal response</i>
    * <p>
    * Status: 200<br />
-   * Body: [{"id": "[id]", "username": "[username]", "bestAttemptsCount":
-   * "[bestAttemptsCount]"}, ...]
-   * <p>
-   * <i>Response in case the players not found</i>
-   * <p>
-   * Status: 200<br />
-   * Body: []
+   * Body: [{id: 1, username: "vasya", bestAttemptsCount: 10}, ... ]
    * 
-   * @return a {@code ResponseEntity} with the {@code 200} status and the body
-   *         containing information about the players with the best result
+   * @return a {@code ResponseEntity} with the status {@code 200} and the body
+   *         containing all players with the best result
    */
   @GetMapping("/withBestResult")
   public ResponseEntity<List<PlayerSummary>> getPlayersWithBestResult() {
@@ -187,25 +174,24 @@ public class PlayerController {
    * <i>Request</i>
    * <p>
    * POST /players<br />
-   * Body: {"id": "null", "username": "[username]", "bestAttemptsCount":
-   * "[bestAttemptsCount]"}
+   * Body: {id: 1, username: "vasya", bestAttemptsCount: 10}
    * <p>
-   * <i>Normal response</i>
+   * <i>A new player was created</i>
    * <p>
    * Status: 201<br />
-   * Body: {"id": "[id]", "username": "[username]", "bestAttemptsCount":
-   * "[bestAttemptsCount]"}
+   * Location: /players/1<br />
+   * Body: {id: 1, username: "vasya", bestAttemptsCount: 10}
    * <p>
-   * <i>Response in case the player with the given username already exists</i>
+   * <i>The player with this username already exists</i>
    * <p>
    * Status: 400<br />
-   * Body: {"error": "Duplicating username"}
+   * Body: {error: "Duplicating username"}
    * 
-   * @param player a {@code PlayerSummary} representing the player to be created
-   * @return a {@code ResponseEntity} with the {@code 201} status and the body
-   *         containing information about the new player
-   * @throws DuplicateKeyException if the player with the given username already
-   *         exist
+   * @param player a {@code PlayerSummary} representing the player to create
+   * @return a {@code ResponseEntity} with the status {@code 201} and the body
+   *         containing a new player
+   * @throws DuplicateKeyException if the player with this username already
+   *         exists
    * @see PlayerResponseEntityExceptionHandler
    */
   @PostMapping
@@ -217,7 +203,7 @@ public class PlayerController {
   }
 
   /**
-   * Updates the player with the given id.<br />
+   * Updates the player by id. Requires authentication and the CSRF token.<br />
    * The player's id from the request body is ignored.
    * <p>
    * Serves the {@code PUT} requests for the {@code /players/{id}} endpoints.
@@ -226,28 +212,29 @@ public class PlayerController {
    * <p>
    * <i>Request</i>
    * <p>
-   * PUT /players/[id]<br />
-   * Cookie: JSESSIONID=[JSESSIONID]<br />
-   * X-CSRF-TOKEN: [CSRF token]<br />
-   * Body: {"id": "null", "username": "[username]", "bestAttemptsCount":
-   * "[bestAttemptsCount]"}
+   * PUT /players/1<br />
+   * Body: {id: 1, username: "vasya", bestAttemptsCount: 10}
    * <p>
-   * <i>Normal response</i>
+   * <i>The player was updated</i>
    * <p>
    * Status: 204
    * <p>
-   * <i>Response in case the player not found</i>
+   * <i>The player wasn't found</i>
    * <p>
    * Status: 404<br />
-   * Body: {"error": "Can't find player with id = [id]"}
+   * Body: {error: "Can't find player with id = 1}
+   * <p>
+   * <i>The player with this username already exists</i>
+   * <p>
+   * Status: 400<br />
+   * Body: {error: "Duplicating username"}
    * 
    * @param id a {@code Long} representing the player's id
-   * @param player a {@code PlayerSummary} representing the player details to be
-   *        updated
-   * @return a {@code ResponseEntity} with the {@code 204} status and the empty
-   *         body
-   * @throws PlayerNotFoundException if the player with the given id doesn't
-   *         exist
+   * @param player a {@code PlayerSummary} representing the player to be updated
+   * @return a {@code ResponseEntity} with the status {@code 204}
+   * @throws PlayerNotFoundException if the player with this id doesn't exist
+   * @throws DuplicateKeyException if the player with this username already
+   *         exists
    * @throws PlayerNotUpdatedException if the player failed to be updated for
    *         technical reasons
    * @see PlayerResponseEntityExceptionHandler
@@ -259,7 +246,7 @@ public class PlayerController {
   }
 
   /**
-   * Patches the player with the given id.<br />
+   * Patches the player by id. Requires authentication and the CSRF token.<br />
    * The player's id from the request body is ignored.<br />
    * <p>
    * Serves the {@code PATCH} requests for the {@code /players/{id}} endpoints.
@@ -269,27 +256,28 @@ public class PlayerController {
    * <i>Request</i>
    * <p>
    * PATCH /players/[id]<br />
-   * Cookie: JSESSIONID=[JSESSIONID]<br />
-   * X-CSRF-TOKEN: [CSRF token]<br />
-   * Body: {(optional) "username": "[username]", (optional) "bestAttemptsCount":
-   * "[bestAttemptsCount]"}
+   * Body: {id: 1, username: "vasya", bestAttemptsCount: 10}
    * <p>
-   * <i>Normal response</i>
+   * <i>The player was patched</i>
    * <p>
    * Status: 204
    * <p>
-   * <i>Response in case the player not found</i>
+   * <i>The player wasn't found</i>
    * <p>
    * Status: 404<br />
-   * Body: {"error": "Can't find player with id = [id]"}
+   * Body: {error: "Can't find player with id = 1"}
+   * <p>
+   * <i>The player with this username already exists</i>
+   * <p>
+   * Status: 400<br />
+   * Body: {error: "Duplicating username"}
    * 
    * @param id a {@code Long} representing the player's id
-   * @param player a {@code PlayerSummary} representing the player details to be
-   *        patched
-   * @return a {@code ResponseEntity} with the {@code 204} status and the empty
-   *         body
-   * @throws PlayerNotFoundException if the player with the given id doesn't
-   *         exist
+   * @param player a {@code PlayerSummary} representing the player to be patched
+   * @return a {@code ResponseEntity} with the status {@code 204}
+   * @throws PlayerNotFoundException if the player with this id doesn't exist
+   * @throws DuplicateKeyException if the player with this username already
+   *         exists
    * @throws PlayerNotUpdatedException if the player failed to be patched for
    *         technical reasons
    * @see PlayerResponseEntityExceptionHandler
@@ -301,7 +289,7 @@ public class PlayerController {
   }
 
   /**
-   * Deletes the player with the given id, responds with no content.
+   * Deletes the player by id. Requires authentication and the CSRF token.
    * <p>
    * Serves the {@code DELETE} requests for the {@code /players/{id}} endpoints.
    * <p>
@@ -309,17 +297,14 @@ public class PlayerController {
    * <p>
    * <i>Request</i>
    * <p>
-   * DELETE /players/[id]<br />
-   * Cookie: JSESSIONID=[JSESSIONID]<br />
-   * X-CSRF-TOKEN: [CSRF token]
+   * DELETE /players/1<br />
    * <p>
-   * <i>Normal response</i>
+   * <i>The player was deleted</i>
    * <p>
    * Status: 204
    * 
    * @param id a {@code Long} representing the player's id
-   * @return a {@code ResponseEntity} with the {@code 204} status and the empty
-   *         body
+   * @return a {@code ResponseEntity} with the status {@code 204}
    */
   @DeleteMapping("/{id}")
   public ResponseEntity<?> deleteById(@PathVariable Long id) {

@@ -1,0 +1,27 @@
+server:
+  port: 8082
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        default_schema: guess_number_game_test
+        format_sql: false
+  liquibase:
+    enabled: false
+logging:
+  config: classpath:logback-test.xml
+springdoc:
+  enabled: false
+  swagger-ui:
+    enabled: false
+app:
+  security:
+    addAdmin: false
+  profiling:
+    restControllers: false
+    services: false

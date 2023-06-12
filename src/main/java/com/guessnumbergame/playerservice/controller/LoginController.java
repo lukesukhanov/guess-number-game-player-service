@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * The REST controller which provides the endpoint for user authentication.
+ * Provides the endpoint for user authentication.
  * <p>
  * The endpoint {@code /login} is used.
  * <p>
@@ -37,23 +37,17 @@ public class LoginController {
    * <i>Request</i>
    * <p>
    * POST /login<br />
-   * Authorization: Basic [username]:[password]
+   * Authorization: Basic vasya:1234
    * <p>
-   * The '[username]:[password]' part must be encoded with the Base64 algorithm.
+   * The 'username:password' part must be encoded with the Base64 algorithm.
    * <p>
-   * <i>Normal response</i>
+   * <i>Successful authentication</i>
    * <p>
    * Status: 200<br />
-   * Set-Cookie: JSESSIONID=[JSESSIONID]<br />
-   * Body: {"username": "[username]"}
-   * <p>
-   * <i>Response in case authentication has failed</i>
-   * <p>
-   * Status: 401
+   * Body: {username: "vasya"}
    * 
-   * @return a {@code ResponseEntity} with the {@code 200} status and the body
-   *         containing
-   *         the authenticated user's username
+   * @return a {@code ResponseEntity} with the status {@code 200} and the body
+   *         containing the authenticated username
    */
   @PostMapping
   public ResponseEntity<?> login() {

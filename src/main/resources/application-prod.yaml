@@ -10,12 +10,20 @@ spring:
         default_schema: guess_number_game
         format_sql: false
   liquibase:
-    change-log: classpath:/db/changelog/prod/changelog.yml
-    drop-first: false
+    enabled: true
+    change-log: classpath:/db/changelog/prod/changelog.yaml
+    liquibase-schema: public
     default-schema: guess_number_game
+    drop-first: false
+logging:
+  config: classpath:logback-prod.xml
+springdoc:
+  enabled: false
+  swagger-ui:
+    enabled: false
 app:
   security:
-    addAdminUser: false
+    addAdmin: false
     cors-origins: http://127.0.0.1:8081
   profiling:
     restControllers: false

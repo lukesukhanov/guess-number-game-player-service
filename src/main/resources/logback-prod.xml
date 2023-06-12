@@ -7,6 +7,7 @@
 
 	<appender name="STDOUT"
 		class="ch.qos.logback.core.ConsoleAppender">
+		<append>false</append>
 		<encoder>
 			<pattern>
 				%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %logger{36} - %msg%n
@@ -15,7 +16,7 @@
 	</appender>
 
 	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
-		<file>logs/log-dev.txt</file>
+		<file>logs/prod/log.txt</file>
 		<append>true</append>
 		<layout>
 			<pattern>

@@ -38,7 +38,7 @@ public class GeneralSecurityConfig {
   }
 
   @Bean
-  @ConditionalOnProperty("app.security.addAdminUser")
+  @ConditionalOnProperty("app.security.addAdmin")
   CommandLineRunner addUsers(UserDetailsManager userDetailsManager, PasswordEncoder passwordEncoder,
       PlayerService playerService, PlayerMapper playerMapper) {
     return args -> {

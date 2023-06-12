@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * The REST controller which provides the endpoint for receiving CSRF token.
+ * Provides the endpoint for receiving a new CSRF token.
  * <p>
  * The endpoint {@code /csrfToken} is used.
  * <p>
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CsrfTokenController {
 
   /**
-   * Generates a new CSRF token for the authenticated user.
+   * Generates a new CSRF token. Requires authentication.
    * <p>
    * Serves the {@code POST} requests for the {@code /login} endpoint.
    * <p>
@@ -30,24 +30,19 @@ public class CsrfTokenController {
    * <i>Request</i>
    * <p>
    * POST /csrfToken<br />
-   * Cookie: JSESSIONID=[JSESSIONID]
    * <p>
-   * <i>Normal response</i>
+   * <i>A new CSRF token was created</i>
    * <p>
-   * Status: 200<br />
+   * Status: 204<br />
    * X-CSRF-TOKEN: [CSRF token]
-   * <p>
-   * <i>Response in case authentication has failed</i>
-   * <p>
-   * Status: 401
    * 
-   * @return a {@code ResponseEntity} with the {@code 200} status, the header
-   *         {@code X-CSRF-TOKEN} with the new CSRF token and the empty body
+   * @return a {@code ResponseEntity} with the status {@code 204} and the header
+   *         {@code X-CSRF-TOKEN} containing a new CSRF token
    */
   @PostMapping
-  ResponseEntity<?> sendCsrfToken(CsrfToken csrfToken) {
+  ResponseEntity<?> getCsrfToken(CsrfToken csrfToken) {
     return ResponseEntity
-        .ok()
+        .noContent()
         .header(csrfToken.getHeaderName(), csrfToken.getToken())
         .build();
   }

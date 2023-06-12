@@ -1,0 +1,40 @@
+server:
+  port: 8082
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        default_schema: guess_number_game_dev
+        format_sql: true
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/dev/changelog.yaml
+    liquibase-schema: public
+    default-schema: guess_number_game_dev
+    drop-first: true
+logging:
+  config: classpath:logback-dev.xml
+springdoc:
+  enabled: true
+  swagger-ui:
+    enabled: true
+    url: openapi.yaml
+    tryItOutEnabled: true
+    operationsSorter: method
+    disable-swagger-default-url: true
+    use-root-path: true
+    csrf:
+      enabled: true
+      header-name: X-CSRF-Token
+app:
+  security:
+    addAdmin: true
+    cors-origins: http://127.0.0.1:5500
+  profiling:
+    restControllers: false
+    services: false

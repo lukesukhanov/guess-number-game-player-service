@@ -3,7 +3,6 @@ package com.guessnumbergame.playerservice.controller;
 import java.net.URI;
 
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -57,34 +56,34 @@ public class RegistrationController {
    * <i>Request</i>
    * <p>
    * POST /register<br />
-   * Authorization: [username]:[password]<br />
+   * Registration: vasya:1234<br />
    * <p>
-   * The '[username]:[password]' part must be encoded with the Base64 algorithm.
+   * The "username:password" expression must be encoded with the Base64
+   * algorithm.
    * <p>
-   * <i>Normal response</i>
+   * <i>Successful registration</i>
    * <p>
    * Status: 201<br />
-   * Location: /players/[id]<br />
-   * Body: {"id": "[id]", "username": "[username]", "bestAttemptsCount": "null"}
+   * Location: /players/1<br />
+   * Body: {id: 1, username: "vasya", bestAttemptsCount: null}
    * <p>
    * <i>Response in case the user with the given username already exists</i>
    * <p>
    * Status: 400<br />
-   * Body: {"error": "Duplicating username"}
+   * Body: {error: "Duplicating username"}
    * 
    * @param registrationForm a {@link RegistrationForm} with the new user's
    *        credentials
-   * @return a {@code ResponseEntity} with the {@code 201} status and the body
-   *         containing
-   *         {@link PlayerSummary} with information about the new player
-   * @throws DuplicateKeyException if the player with the given username already
+   * @return a {@code ResponseEntity} with the status {@code 201} and the body
+   *         containing a new {@link PlayerSummary}
+   * @throws DuplicateKeyException if the player with this username already
    *         exists
    * @see RegistrationResponseEntityExceptionHandler
    */
   @PostMapping
   @Transactional
   public ResponseEntity<PlayerSummary> register(
-      @RequestHeader(HttpHeaders.AUTHORIZATION) RegistrationForm registrationForm) {
+      @RequestHeader("Registration") RegistrationForm registrationForm) {
     User user = registrationForm.toUser(this.passwordEncoder);
     log.trace("Created a new User from RegistrationForm: {}", user);
     this.userDetailsManager.createUser(user);

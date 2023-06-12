@@ -7,20 +7,16 @@ server:
         same-site: Strict
         secure: false
 spring:
-  profiles:
-    active: dev
   datasource:
     driverClassName: org.postgresql.Driver
-    username: postgres
-    password: postgres
     type: com.zaxxer.hikari.HikariDataSource
-    tomcat:
-      initial-size: 5
-      max-wait: 20000
-      max-active: 10
-      min-idle: 8
-      max-idle: 15
-      default-auto-commit: true
+    hikari:
+      connection-timeout: 20000
+      minimum-idle: 5
+      maximum-pool-size: 10
+      idle-timeout: 10000
+      max-lifetime: 1000
+      auto-commit: true
   jpa:
     open-in-view: false
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -29,12 +25,9 @@ spring:
     properties:
       hibernate:
         jdbc:
-          batch_size: 10
-          fetch_size: 10
+          batch_size: 15
+          fetch_size: 90
         max_fetch_depth: 3
         generate_statistics: false
         temp:
           use_jdbc_metadata_defaults: true
-  liquibase:
-    enabled: true
-    liquibase-schema: public
