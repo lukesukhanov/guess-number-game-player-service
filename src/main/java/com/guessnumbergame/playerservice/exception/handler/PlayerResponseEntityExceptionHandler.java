@@ -76,11 +76,10 @@ public class PlayerResponseEntityExceptionHandler extends ResponseEntityExceptio
   @ExceptionHandler(DuplicateKeyException.class)
   public ResponseEntity<Object> handleDuplicateKeyException(DuplicateKeyException e,
       WebRequest request) {
-    log.debug("Handling DuplicateKeyException: {}"
-        + "cause: {}", e.toString(), e.getCause().toString());
-    Map<String, Object> responseBody = Map.of(
-        "error", "Duplicating username",
-        "cause", e.getCause().getMessage());
+    log.debug("Handling DuplicateKeyException: {}", e.toString());
+    Map<String, Object> responseBody = e.getMessage().contains("Key (username)")
+        ? Map.of("error", "Duplicating username")
+        : Map.of("error", e.toString());
     HttpHeaders headers = new HttpHeaders();
     return handleExceptionInternal(e, responseBody, headers, HttpStatus.BAD_REQUEST, request);
   }

@@ -82,9 +82,10 @@ class RegistrationControllerTest {
     byte[] credentialsBytes = credentials.getBytes(StandardCharsets.UTF_8);
     String encodedCredentials = Base64.getEncoder().encodeToString(credentialsBytes);
     User user = new User("username", "password");
+    DuplicateKeyException e = new DuplicateKeyException("Key (username)");
     when(this.passwordEncoder.encode("password"))
         .thenReturn("password");
-    doThrow(DuplicateKeyException.class)
+    doThrow(e)
         .when(this.userDetailsManager).createUser(user);
     this.mockMvc.perform(post("/register")
         .accept(MediaType.APPLICATION_JSON)

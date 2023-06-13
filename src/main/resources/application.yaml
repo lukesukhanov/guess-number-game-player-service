@@ -11,11 +11,11 @@ spring:
     driverClassName: org.postgresql.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
-      connection-timeout: 20000
+      connection-timeout: 10000
       minimum-idle: 5
       maximum-pool-size: 10
-      idle-timeout: 10000
-      max-lifetime: 1000
+      idle-timeout: 60000
+      max-lifetime: 180000
       auto-commit: true
   jpa:
     open-in-view: false

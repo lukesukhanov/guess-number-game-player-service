@@ -195,8 +195,9 @@ class PlayerControllerTest {
   @DisplayName("create(PlayerSummary) - duplicating username")
   final void create_duplicatingUsername() throws Exception {
     PlayerSummary player = new PlayerSummary(null, "username", 1);
+    DuplicateKeyException e = new DuplicateKeyException("Key (username)");
     when(this.playerService.create(player))
-        .thenThrow(new DuplicateKeyException("message"));
+        .thenThrow(e);
     this.mockMvc.perform(post("/players")
         .contentType(MediaType.APPLICATION_JSON)
         .accept(MediaType.APPLICATION_JSON)
@@ -204,7 +205,8 @@ class PlayerControllerTest {
         .andExpectAll(
             status().isBadRequest(),
             content().contentType(MediaType.APPLICATION_JSON),
-            content().string(this.objectMapper.writeValueAsString(Map.of("error", "Duplicating username"))));
+            content().string(
+                this.objectMapper.writeValueAsString(Map.of("error", "Duplicating username"))));
   }
 
   @Test
