@@ -11,6 +11,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.guessnumbergame.playerservice.dto.PlayerSummary;
 import com.guessnumbergame.playerservice.entity.PlayerEntity;
@@ -45,28 +46,33 @@ public class DefaultPlayerService implements PlayerService {
 
   private final ApplicationContext applicationContext;
 
+  @Transactional(readOnly = true)
   @Override
   public List<PlayerSummary> getAll() {
     return this.playerRepository.findAllPlayerSummaries();
   }
 
+  @Transactional(readOnly = true)
   @Override
   public PlayerSummary getById(Long id) {
     return this.playerRepository.findPlayerSummaryById(id)
         .orElseThrow(() -> new PlayerNotFoundException(id));
   }
 
+  @Transactional(readOnly = true)
   @Override
   public PlayerSummary getByUsername(String username) {
     return this.playerRepository.findPlayerSummaryByUsername(username)
         .orElseThrow(() -> new PlayerNotFoundException(username));
   }
 
+  @Transactional(readOnly = true)
   @Override
   public List<PlayerSummary> getPlayersWithBestResult() {
     return this.playerRepository.findPlayerSummariesWithBestResult();
   }
 
+  @Transactional
   @Override
   public PlayerSummary create(PlayerSummary player) {
     PlayerEntity playerEntity = this.playerMapper.playerSummaryToPlayerEntity(player);
@@ -74,6 +80,7 @@ public class DefaultPlayerService implements PlayerService {
     return this.playerMapper.playerEntityToPlayerSummary(savedPlayerEntity);
   }
 
+  @Transactional
   @Retryable(
       retryFor = ObjectOptimisticLockingFailureException.class,
       noRetryFor = {
@@ -107,6 +114,7 @@ public class DefaultPlayerService implements PlayerService {
     throw new PlayerNotUpdatedException(id, e);
   }
 
+  @Transactional
   @Retryable(
       retryFor = ObjectOptimisticLockingFailureException.class,
       noRetryFor = {
