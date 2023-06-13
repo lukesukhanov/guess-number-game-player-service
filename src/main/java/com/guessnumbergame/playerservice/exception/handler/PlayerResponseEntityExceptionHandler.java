@@ -76,8 +76,11 @@ public class PlayerResponseEntityExceptionHandler extends ResponseEntityExceptio
   @ExceptionHandler(DuplicateKeyException.class)
   public ResponseEntity<Object> handleDuplicateKeyException(DuplicateKeyException e,
       WebRequest request) {
-    log.debug("Handling DuplicateKeyException: {}", e.toString());
-    Map<String, Object> responseBody = Map.of("error", "Duplicating username");
+    log.debug("Handling DuplicateKeyException: {}"
+        + "cause: {}", e.toString(), e.getCause().toString());
+    Map<String, Object> responseBody = Map.of(
+        "error", "Duplicating username",
+        "cause", e.getCause().getMessage());
     HttpHeaders headers = new HttpHeaders();
     return handleExceptionInternal(e, responseBody, headers, HttpStatus.BAD_REQUEST, request);
   }
@@ -93,8 +96,11 @@ public class PlayerResponseEntityExceptionHandler extends ResponseEntityExceptio
   @ExceptionHandler(PlayerNotUpdatedException.class)
   public ResponseEntity<Object> handlePlayerNotUpdatedException(PlayerNotUpdatedException e,
       WebRequest request) {
-    log.warn("Handling PlayerNotUpdatedException: {}", e.toString());
-    Map<String, Object> responseBody = Map.of("error", e.getMessage());
+    log.warn("Handling PlayerNotUpdatedException: {}\n"
+        + "cause: {}", e.toString(), e.getCause().toString());
+    Map<String, Object> responseBody = Map.of(
+        "error", e.getMessage(),
+        "cause", e.getCause().getMessage());
     HttpHeaders headers = new HttpHeaders();
     return handleExceptionInternal(e, responseBody, headers, HttpStatus.INTERNAL_SERVER_ERROR,
         request);

@@ -11,7 +11,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.guessnumbergame.playerservice.dto.PlayerSummary;
 import com.guessnumbergame.playerservice.entity.PlayerEntity;
@@ -75,7 +74,6 @@ public class DefaultPlayerService implements PlayerService {
     return this.playerMapper.playerEntityToPlayerSummary(savedPlayerEntity);
   }
 
-  @Transactional
   @Retryable(
       retryFor = ObjectOptimisticLockingFailureException.class,
       noRetryFor = {
@@ -106,10 +104,9 @@ public class DefaultPlayerService implements PlayerService {
 
   @Recover
   private void recoverUpdate(RuntimeException e, Long id, PlayerSummary player) {
-    throw new PlayerNotUpdatedException(id);
+    throw new PlayerNotUpdatedException(id, e);
   }
 
-  @Transactional
   @Retryable(
       retryFor = ObjectOptimisticLockingFailureException.class,
       noRetryFor = {
@@ -142,7 +139,7 @@ public class DefaultPlayerService implements PlayerService {
 
   @Recover
   private void recoverPatch(RuntimeException e, Long id, PlayerSummary player) {
-    throw new PlayerNotUpdatedException(id);
+    throw new PlayerNotUpdatedException(id, e);
   }
 
   @Override
