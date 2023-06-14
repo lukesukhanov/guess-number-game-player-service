@@ -17,22 +17,18 @@ import com.guessnumbergame.playerservice.Application;
 class PlayerEntityTest {
 
   @Test
-  @DisplayName("equals(Object) - matching objects")
-  final void equals_matchingObjects() throws Exception {
-    PlayerEntity player1 = new PlayerEntity();
-    player1.setId(1L);
-    player1.setUsername("username");
-    player1.setBestAttemptsCount(1);
-    PlayerEntity player2 = new PlayerEntity();
-    player2.setId(2L);
-    player2.setUsername("username");
-    player2.setBestAttemptsCount(2);
-    assertEquals(player1, player2);
+  @DisplayName("equals(Object) - the same object")
+  final void equals_sameObject() throws Exception {
+    PlayerEntity player = new PlayerEntity();
+    player.setId(1L);
+    player.setUsername("username1");
+    player.setBestAttemptsCount(1);
+    assertEquals(player, player);
   }
-
+  
   @Test
-  @DisplayName("equals(Object) - not matching objects")
-  final void equals_notMatchingObjects() throws Exception {
+  @DisplayName("equals(Object) - the same id")
+  final void equals_sameId() throws Exception {
     PlayerEntity player1 = new PlayerEntity();
     player1.setId(1L);
     player1.setUsername("username1");
@@ -40,13 +36,13 @@ class PlayerEntityTest {
     PlayerEntity player2 = new PlayerEntity();
     player2.setId(1L);
     player2.setUsername("username2");
-    player2.setBestAttemptsCount(1);
-    assertNotEquals(player1, player2);
+    player2.setBestAttemptsCount(2);
+    assertEquals(player1, player2);
   }
 
   @Test
-  @DisplayName("hashCode() - matching objects")
-  final void hashCode_matchingObjects() throws Exception {
+  @DisplayName("equals(Object) - different id")
+  final void equals_differentId() throws Exception {
     PlayerEntity player1 = new PlayerEntity();
     player1.setId(1L);
     player1.setUsername("username");
@@ -54,6 +50,45 @@ class PlayerEntityTest {
     PlayerEntity player2 = new PlayerEntity();
     player2.setId(2L);
     player2.setUsername("username");
+    player2.setBestAttemptsCount(1);
+    assertNotEquals(player1, player2);
+  }
+  
+  @Test
+  @DisplayName("equals(Object) - one of the ids is null")
+  final void equals_oneOfIdsIsNull() throws Exception {
+    PlayerEntity player1 = new PlayerEntity();
+    player1.setUsername("username");
+    player1.setBestAttemptsCount(1);
+    PlayerEntity player2 = new PlayerEntity();
+    player2.setId(1L);
+    player2.setUsername("username");
+    player2.setBestAttemptsCount(1);
+    assertNotEquals(player1, player2);
+  }
+  
+  @Test
+  @DisplayName("equals(Object) - both ids are null")
+  final void equals_bothIdsAreNull() throws Exception {
+    PlayerEntity player1 = new PlayerEntity();
+    player1.setUsername("username");
+    player1.setBestAttemptsCount(1);
+    PlayerEntity player2 = new PlayerEntity();
+    player2.setUsername("username");
+    player2.setBestAttemptsCount(1);
+    assertNotEquals(player1, player2);
+  }
+
+  @Test
+  @DisplayName("hashCode() - any other PlayerEntity")
+  final void hashCode_anyOtherPlayerEntity() throws Exception {
+    PlayerEntity player1 = new PlayerEntity();
+    player1.setId(1L);
+    player1.setUsername("username1");
+    player1.setBestAttemptsCount(1);
+    PlayerEntity player2 = new PlayerEntity();
+    player2.setId(2L);
+    player2.setUsername("username2");
     player2.setBestAttemptsCount(2);
     assertEquals(player1.hashCode(), player2.hashCode());
   }

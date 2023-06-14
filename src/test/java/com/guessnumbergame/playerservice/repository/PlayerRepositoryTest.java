@@ -35,11 +35,11 @@ class PlayerRepositoryTest {
   private final List<PlayerSummary> existingPlayersWithBestResult;
 
   {
-    PlayerSummary player1 = new PlayerSummary(null, "ivan", 8);
-    PlayerSummary player2 = new PlayerSummary(null, "pyotr", 5);
-    PlayerSummary player3 = new PlayerSummary(null, "nadezhda", 7);
-    PlayerSummary player4 = new PlayerSummary(null, "boris", 5);
-    PlayerSummary player5 = new PlayerSummary(null, "darya", null);
+    PlayerSummary player1 = new PlayerSummary(1L, "ivan", 8);
+    PlayerSummary player2 = new PlayerSummary(6L, "pyotr", 5);
+    PlayerSummary player3 = new PlayerSummary(11L, "nadezhda", 7);
+    PlayerSummary player4 = new PlayerSummary(16L, "boris", 5);
+    PlayerSummary player5 = new PlayerSummary(21L, "darya", null);
 
     List<PlayerSummary> players = new ArrayList<>(5);
     Collections.addAll(players, player1, player2, player3, player4, player5);

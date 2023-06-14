@@ -1,6 +1,6 @@
 package com.guessnumbergame.playerservice.mapper;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -24,11 +24,8 @@ class PlayerMapperTest {
   @DisplayName("playerSummaryToPlayerEntity() - ignores id")
   final void test() {
     PlayerSummary playerSummary = new PlayerSummary(1L, "ivan", 8);
-    PlayerEntity expectedPlayerEntity = new PlayerEntity();
-    expectedPlayerEntity.setUsername("ivan");
-    expectedPlayerEntity.setBestAttemptsCount(8);
     PlayerEntity playerEntity = this.playerMapper.playerSummaryToPlayerEntity(playerSummary);
-    assertEquals(playerEntity, expectedPlayerEntity);
+    assertNull(playerEntity.getId());
   }
 
 }

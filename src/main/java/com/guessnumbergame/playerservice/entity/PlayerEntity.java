@@ -14,7 +14,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,7 +26,10 @@ import lombok.ToString;
  * The optimistic locking is supported.
  * <p>
  * The {@code equals} method should be used for comparisons.
- * The {@code PlayerEntity} objects are compared by {@code username}.
+ * The {@code PlayerEntity} objects are compared by {@code id}.
+ * The {@code PlayerEntity} with {@code id = null} is equal only to itself.
+ * <p>
+ * The {@code hashCode} method always returns the same value.
  * <p>
  * This class is not immutable and should not be used concurrently.
  * 
@@ -55,7 +57,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = "username")
 @ToString
 public class PlayerEntity {
 
@@ -87,5 +88,22 @@ public class PlayerEntity {
   @Version
   @Column(name = "VERSION", insertable = false, updatable = false)
   protected Integer version;
+
+  @Override
+  public int hashCode() {
+    return 31;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof PlayerEntity)) {
+      return false;
+    }
+    PlayerEntity other = (PlayerEntity) o;
+    return this.id != null && this.id.equals(other.id);
+  }
 
 }

@@ -14,7 +14,8 @@ import lombok.ToString;
  * Contains the most important information about player.
  * <p>
  * The {@code equals} method should be used for comparisons.
- * The {@code PlayerSummary} objects are compared by {@code username}.
+ * The {@code PlayerSummary} objects are compared by {@code id},
+ * {@code username} and {@code bestAttemptsCount}.
  * <p>
  * This class is immutable and thread-safe.
  * 
@@ -23,7 +24,7 @@ import lombok.ToString;
  */
 @RequiredArgsConstructor
 @Getter
-@EqualsAndHashCode(of = "username")
+@EqualsAndHashCode(of = { "id", "username", "bestAttemptsCount" })
 @ToString
 public final class PlayerSummary implements Serializable {
 
