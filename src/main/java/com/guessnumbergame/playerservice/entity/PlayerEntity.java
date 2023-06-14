@@ -75,19 +75,19 @@ public class PlayerEntity {
       allocationSize = 5)
   @GeneratedValue(generator = "common_id_seq")
   @Column(name = "ID", updatable = false)
-  protected Long id;
+  private Long id;
 
   @NotBlank(message = "Username is required")
   @Column(name = "USERNAME")
-  protected String username;
+  private String username;
 
   @Positive(message = "Best attempts count must be positive")
   @Column(name = "BEST_ATTEMPTS_COUNT")
-  protected Integer bestAttemptsCount;
+  private Integer bestAttemptsCount;
 
   @Version
   @Column(name = "VERSION", insertable = false, updatable = false)
-  protected Integer version;
+  private Integer version;
 
   @Override
   public int hashCode() {
@@ -103,7 +103,7 @@ public class PlayerEntity {
       return false;
     }
     PlayerEntity other = (PlayerEntity) o;
-    return this.id != null && this.id.equals(other.id);
+    return this.id != null && this.id.equals(other.getId());
   }
 
 }
