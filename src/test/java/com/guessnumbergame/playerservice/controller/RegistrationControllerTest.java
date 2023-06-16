@@ -1,6 +1,5 @@
 package com.guessnumbergame.playerservice.controller;
 
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -21,15 +20,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guessnumbergame.playerservice.Application;
 import com.guessnumbergame.playerservice.dto.PlayerSummary;
-import com.guessnumbergame.playerservice.dto.User;
-import com.guessnumbergame.playerservice.service.PlayerService;
+import com.guessnumbergame.playerservice.dto.RegistrationForm;
+import com.guessnumbergame.playerservice.service.RegistrationService;
 
 @SpringBootTest(classes = Application.class)
 @DisplayName("RegistrationController")
@@ -39,13 +36,7 @@ import com.guessnumbergame.playerservice.service.PlayerService;
 class RegistrationControllerTest {
 
   @MockBean
-  private UserDetailsManager userDetailsManager;
-
-  @MockBean
-  private PasswordEncoder passwordEncoder;
-
-  @MockBean
-  private PlayerService playerService;
+  private RegistrationService registrationService;
 
   @Autowired
   private MockMvc mockMvc;
@@ -59,11 +50,9 @@ class RegistrationControllerTest {
     String credentials = "username:password";
     byte[] credentialsBytes = credentials.getBytes(StandardCharsets.UTF_8);
     String encodedCredentials = Base64.getEncoder().encodeToString(credentialsBytes);
-    PlayerSummary player = new PlayerSummary(null, "username", null);
+    RegistrationForm registrationForm = new RegistrationForm(encodedCredentials);
     PlayerSummary savedPlayer = new PlayerSummary(1L, "username", null);
-    when(this.passwordEncoder.encode("password"))
-        .thenReturn("password");
-    when(this.playerService.create(player))
+    when(this.registrationService.register(registrationForm))
         .thenReturn(savedPlayer);
     this.mockMvc.perform(post("/register")
         .accept(MediaType.APPLICATION_JSON)
@@ -72,7 +61,7 @@ class RegistrationControllerTest {
             status().isCreated(),
             header().string(HttpHeaders.LOCATION, "/players/1"),
             content().contentType(MediaType.APPLICATION_JSON),
-            content().string(objectMapper.writeValueAsString(savedPlayer)));
+            content().string(this.objectMapper.writeValueAsString(savedPlayer)));
   }
 
   @Test
@@ -81,21 +70,19 @@ class RegistrationControllerTest {
     String credentials = "username:password";
     byte[] credentialsBytes = credentials.getBytes(StandardCharsets.UTF_8);
     String encodedCredentials = Base64.getEncoder().encodeToString(credentialsBytes);
-    User user = new User("username", "password");
-    DuplicateKeyException e = new DuplicateKeyException("Key (username)");
-    when(this.passwordEncoder.encode("password"))
-        .thenReturn("password");
-    doThrow(e)
-        .when(this.userDetailsManager).createUser(user);
+    RegistrationForm registrationForm = new RegistrationForm(encodedCredentials);
+    DuplicateKeyException e = new DuplicateKeyException("Duplicating username");
+    when(this.registrationService.register(registrationForm))
+        .thenThrow(e);
     this.mockMvc.perform(post("/register")
         .accept(MediaType.APPLICATION_JSON)
         .header("Registration", encodedCredentials))
         .andExpectAll(
             status().isBadRequest(),
             content().contentType(MediaType.APPLICATION_JSON),
-            content().string(objectMapper
+            content().string(this.objectMapper
                 .writeValueAsString(
-                    Map.of("error", "Duplicating username"))));
+                    Map.of("error", e.toString()))));
   }
 
 }

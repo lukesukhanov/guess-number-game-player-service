@@ -9,12 +9,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.guessnumbergame.playerservice.controller.RegistrationController;
 import com.guessnumbergame.playerservice.exception.BadRegistrationCredentialsException;
 
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 /**
  * Credentials provided during registration.
  * <p>
- * The {@code RegistrationForm} objects are not supposed to be compared.
+ * The {@code equals} method should be used for comparisons.
+ * The {@code RegistrationForm} objects are compared by {@code credentials}.
  * <p>
  * This class is immutable and thread-safe.
  * 
@@ -24,6 +26,7 @@ import lombok.RequiredArgsConstructor;
  * @see RegistrationController
  */
 @RequiredArgsConstructor
+@EqualsAndHashCode
 public final class RegistrationForm implements Serializable {
 
   private static final long serialVersionUID = 1L;

@@ -19,7 +19,7 @@ info:
     name: Luke Sukhanov
     email: lukesukhanov@gmail.com
     url: https://github.com/lukesukhanov
-  version: "1.0"
+  version: "1.1"
 servers: 
   - url: http://127.0.0.1:8082
 paths:
@@ -95,7 +95,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/NewPlayerSummary"
+                example: {id: 1, username: "vasya", bestAttemptsCount: null}
         400:
           description: The user with the given username already exists
           content:
@@ -316,20 +316,6 @@ components:
           type: integer
           format: int32
           example: 10
-    NewPlayerSummary:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 1
-        username:
-          type: string
-          example: vasya
-        bestAttamptsCount:
-          type: integer
-          format: int32
-          example: null
   requestBodies:
     PlayerSummary:
       content:

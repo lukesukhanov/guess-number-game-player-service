@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
  * A user of the API.
  * <p>
  * The {@code equals} method should be used for comparisons.
- * The {@code PlayerSummary} objects are compared by {@code username}.
+ * The {@code User} objects are compared by {@code username}.
  * <p>
  * This class is immutable and thread-safe.
  * 
