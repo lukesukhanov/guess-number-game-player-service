@@ -1,4 +1,4 @@
-package com.guessnumbergame.playerservice.service;
+package com.guessnumbergame.playerservice.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,7 +30,7 @@ import com.guessnumbergame.playerservice.mapper.PlayerMapper;
 import com.guessnumbergame.playerservice.repository.PlayerRepository;
 
 @SpringBootTest(classes = Application.class)
-@DisplayName("PlayerService")
+@DisplayName("DefaultPlayerService")
 @Tag("service")
 @Tag("player")
 class DefaultPlayerServiceTest {
@@ -42,7 +42,7 @@ class DefaultPlayerServiceTest {
   private PlayerMapper playerMapper;
 
   @Autowired
-  private PlayerService playerService;
+  private DefaultPlayerService playerService;
 
   private final List<PlayerSummary> existingPlayers;
 

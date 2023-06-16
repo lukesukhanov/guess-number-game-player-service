@@ -20,7 +20,7 @@
 		<append>true</append>
 		<layout>
 			<pattern>
-				%d{HH:mm:ss.SSS} [%thread] %level %logger{36} - %msg%n
+				%d{HH:mm:ss.SSS} %level %logger{36} - %msg%n
 			</pattern>
 		</layout>
 	</appender>
